@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e15de750dfe510a4d865d3352167a7ce, type: 3}
+  m_Name: Area Image Container
+  m_EditorClassIdentifier: 
+  _id: Dyx5uNcGpAV
+  _levelName: Area Image Container
+  _areaPrefab: {fileID: 0}
+  _textAsset: {fileID: 0}
+  _uiPrefab: {fileID: 0}
+  _mapIcon: {fileID: 0}
+  _mapNameText: 
+  _levelProcessValue: 0
+  _maxLevelProcess: 0
+  _isLevelCompleted: 0
+  _isLevelBought: 0
