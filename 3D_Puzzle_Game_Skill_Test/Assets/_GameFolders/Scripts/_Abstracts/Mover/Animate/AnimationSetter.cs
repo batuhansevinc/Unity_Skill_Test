@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Assignment01.Abstract.Animate
+namespace BufoGames.Abstract.Animate
 {
     public class AnimationSetter : IAnimatable
     {

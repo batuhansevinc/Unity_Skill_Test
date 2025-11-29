@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ea024ff9d659fb43a7e66e80c092ca9, type: 3}
   m_Name: GridCreator
   m_EditorClassIdentifier: 
-  TileA: {fileID: 0}
-  TileB: {fileID: 0}
+  TileA: {fileID: 5384462693812059776, guid: bdfa48ac1ff800541b8762a793e121f1, type: 3}
+  TileB: {fileID: 2487772195507187547, guid: bd93e9184b191664ab1ae1e686869843, type: 3}
   gridSize: 4
   levelIndex: 0
+  gridObjects: []

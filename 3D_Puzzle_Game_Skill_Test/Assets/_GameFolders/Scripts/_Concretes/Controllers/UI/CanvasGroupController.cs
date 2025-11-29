@@ -2,7 +2,7 @@ using BatuhanSevinc.Helpers;
 using BatuhanSevinc.ScriptableObjects;
 using UnityEngine;
 
-namespace Assignment01.Uis
+namespace BufoGames.Uis
 {
     public class CanvasGroupController : MonoBehaviour
     {

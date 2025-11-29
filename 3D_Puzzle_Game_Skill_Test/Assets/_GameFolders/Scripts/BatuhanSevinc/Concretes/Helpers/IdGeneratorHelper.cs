@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Text;
 
-namespace Assignment01.Helpers
+namespace BufoGames.Helpers
 {
     public static class IdGeneratorHelper
     {

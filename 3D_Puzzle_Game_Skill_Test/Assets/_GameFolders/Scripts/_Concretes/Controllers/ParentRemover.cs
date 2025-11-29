@@ -6,8 +6,16 @@ public class ParentRemover : MonoBehaviour
 
     void Start()
     {
-        _parentObject = GetComponentInParent<ClickableObject>().transform.gameObject;
-        transform.SetParent(_parentObject.transform);
-        transform.rotation = new Quaternion(0f, 0f, 0f,0f);
+        var clickableObject = GetComponentInParent<ClickableObject>();
+        if (clickableObject != null)
+        {
+            _parentObject = clickableObject.transform.gameObject;
+            transform.SetParent(_parentObject.transform);
+            transform.rotation = Quaternion.identity;
+        }
+        else
+        {
+            Debug.LogWarning($"ParentRemover: No ClickableObject found in parent hierarchy for {gameObject.name}");
+        }
     }
 }

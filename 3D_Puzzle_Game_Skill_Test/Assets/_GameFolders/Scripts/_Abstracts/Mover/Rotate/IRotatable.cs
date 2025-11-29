@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assignment01.Abstract.Rotate
+namespace BufoGames.Abstract.Rotate
 {
     public interface IRotatable
     {

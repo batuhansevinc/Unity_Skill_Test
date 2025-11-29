@@ -1,113 +1,162 @@
-using System;
-using Assignment01.Controller;
 using BatuhanSevinc.Abstracts.Patterns;
 using BatuhanSevinc.ScriptableObjects;
-using Sirenix.OdinInspector;
+using BufoGames.Controller;
+using BufoGames.Data;
+using BufoGames.Generation;
 using UnityEngine;
 
-namespace Assignment01.Managers
+namespace BufoGames.Managers
 {
     public class LevelManager : SingletonMonoDestroy<LevelManager>
     {
-        [Header("Settings")]
-        [SerializeField] bool _isTesting = true;
-        [SerializeField] string _id;
-
-        [Header("Levels")]
-        [SerializeField] int _currentLevel;
-        [SerializeField, ReadOnly] GameObject _currentLevelPrefab;
-        [SerializeField] GameObject[] _levelPrefabs;
-        [Header("Camera Targets")]
+        [SerializeField] private bool isTesting = true;
+        [SerializeField] private string id = "CurrentLevel";
+        [SerializeField] private int currentLevel = 1;
+        [SerializeField] private LevelDatabaseSO levelDatabase;
+        [SerializeField] private ThemeDataSO defaultTheme;
+        [SerializeField] private GameEvent levelCompletedEvent;
+        [SerializeField] private GameEvent fireworksEvent;
+        [SerializeField] private GameEvent startEndGameAnimationsEvent;
+        
         public Transform upTarget;
         public Transform downTarget;
         public Transform leftTarget;
         public Transform rightTarget;
 
-        public int CurrentLevel => _currentLevel;
+        private LevelGenerator levelGenerator;
+        private GameObject currentLevelInstance;
+        private LevelController currentLevelController;
+        private int currentLevelIndex;
+        
+        public int CurrentLevel => currentLevelIndex + 1;
+        public int TotalLevels => levelDatabase != null ? levelDatabase.GetTotalLevelCount() : 0;
+        public LevelController CurrentLevelController => currentLevelController;
 
         private void Awake()
         {
             SetSingleton(this);
+            EnsureInputManager();
+            InitializeGenerator();
         }
-
+        
         private void Start()
         {
             InitializeGame();
         }
+        
+        private void EnsureInputManager()
+        {
+            var inputManager = FindObjectOfType<InputManager>();
+            if (inputManager == null)
+            {
+                GameObject inputObj = new GameObject("InputManager");
+                inputObj.AddComponent<InputManager>();
+            }
+        }
 
+        private void InitializeGenerator()
+        {
+            GameObject generatorObj = new GameObject("LevelGenerator");
+            generatorObj.transform.SetParent(transform);
+            levelGenerator = generatorObj.AddComponent<LevelGenerator>();
+            
+            if (defaultTheme != null)
+            {
+                levelGenerator.SetDefaultTheme(defaultTheme);
+            }
+        }
+        
         private void InitializeGame()
         {
-            if (_isTesting) 
+            if (levelDatabase == null || levelDatabase.GetTotalLevelCount() == 0) return;
+            if (levelGenerator == null) return;
+            
+            if (isTesting)
             {
-                LoadLevelByIndex(_currentLevel - 1);
-                return;
+                currentLevelIndex = currentLevel - 1;
             }
-
-            var saveLoadManager = PlayerPrefs.GetInt(_id, 1);
-            _currentLevel = saveLoadManager;
-            LoadLevelByIndex(_currentLevel - 1);
+            else
+            {
+                currentLevelIndex = PlayerPrefs.GetInt(id, 0);
+            }
+            
+            LoadLevel(currentLevelIndex);
         }
 
-
-        private bool IsNextLevelExists()
+        public void LoadLevel(int levelIndex)
         {
-            return _currentLevel + 1 <= _levelPrefabs.Length;
+            if (currentLevelInstance != null)
+            {
+                Destroy(currentLevelInstance);
+                currentLevelInstance = null;
+                currentLevelController = null;
+            }
+            
+            if (levelIndex < 0 || levelIndex >= TotalLevels) return;
+            
+            LevelDataSO levelData = levelDatabase.GetLevel(levelIndex);
+            if (levelData == null) return;
+            
+            currentLevelInstance = levelGenerator.GenerateLevel(levelData);
+            if (currentLevelInstance == null) return;
+            
+            currentLevelController = currentLevelInstance.GetComponent<LevelController>();
+            
+            if (currentLevelController != null)
+            {
+                currentLevelController.SetGameEvents(levelCompletedEvent, fireworksEvent, startEndGameAnimationsEvent);
+                AdjustCameraTargets(currentLevelController);
+            }
+            
+            currentLevelIndex = levelIndex;
         }
-
-        private bool IsPreviousLevelExists()
-        {
-            return _currentLevel - 1 >= 1;
-        }
-
+        
         public void MoveToNextLevel()
         {
-            if (IsNextLevelExists())
+            if (currentLevelIndex + 1 < TotalLevels)
             {
-                _currentLevel++;
-                SaveCurrentLevel();
-                LoadLevelByIndex(_currentLevel - 1);
+                currentLevelIndex++;
             }
+            else
+            {
+                currentLevelIndex = 0;
+            }
+            SaveProgress();
+            LoadLevel(currentLevelIndex);
         }
 
         public void MoveToPreviousLevel()
         {
-            if (IsPreviousLevelExists())
+            if (currentLevelIndex > 0)
             {
-                _currentLevel--;
-                SaveCurrentLevel();
-                LoadLevelByIndex(_currentLevel - 1);
+                currentLevelIndex--;
+                SaveProgress();
+                LoadLevel(currentLevelIndex);
             }
         }
-
-        private void SaveCurrentLevel()
+        
+        public void ReloadCurrentLevel()
         {
-            PlayerPrefs.SetInt(_id, _currentLevel);
+            LoadLevel(currentLevelIndex);
         }
 
-        private void LoadLevelByIndex(int index)
+        private void SaveProgress()
         {
-            if (_currentLevelPrefab != null)
-            {
-                Destroy(_currentLevelPrefab);
-            }
-
-            if (index >= 0 && index < _levelPrefabs.Length)
-            {
-                _currentLevelPrefab = Instantiate(_levelPrefabs[index]);
-                LevelController levelController = _currentLevelPrefab.GetComponent<LevelController>();
-                levelController.InitializeGrid();
-                AdjustCameraTargets(levelController);
-            }
+            PlayerPrefs.SetInt(id, currentLevelIndex);
+            PlayerPrefs.Save();
         }
+
         private void AdjustCameraTargets(LevelController levelController)
         {
-            float maxX = (levelController.GetGridSize() - 1) * levelController.GetXInterval();
-            float maxZ = (levelController.GetGridSize() - 1) * levelController.GetZInterval();
-
-            upTarget.position = new Vector3(maxX / 2f, 0, maxZ + levelController.GetZInterval());
-            downTarget.position = new Vector3(maxX / 2f, 0, -levelController.GetZInterval());
-            leftTarget.position = new Vector3(-levelController.GetXInterval(), 0, maxZ / 2f);
-            rightTarget.position = new Vector3(maxX + levelController.GetXInterval(), 0, maxZ / 2f);
+            if (upTarget == null || downTarget == null || leftTarget == null || rightTarget == null) return;
+            
+            var gridData = levelController.GetGridData();
+            if (gridData == null) return;
+            
+            upTarget.position = gridData.GetUpTargetPosition();
+            downTarget.position = gridData.GetDownTargetPosition();
+            leftTarget.position = gridData.GetLeftTargetPosition();
+            rightTarget.position = gridData.GetRightTargetPosition();
         }
     }
 }

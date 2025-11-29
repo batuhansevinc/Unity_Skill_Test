@@ -2,7 +2,7 @@ using BatuhanSevinc.ScriptableObjects;
 using BatuhanSevinc.Uis;
 using UnityEngine;
 
-namespace Assignment01.Uis
+namespace BufoGames.Uis
 {
     public class BaseButtonWithGameEvents : BaseButton
     {

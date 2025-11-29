@@ -1,4 +1,4 @@
-namespace Assignment01.Uis
+namespace BufoGames.Uis
 {
     public class SettingsButton : BaseButtonWithGameEvents
     {

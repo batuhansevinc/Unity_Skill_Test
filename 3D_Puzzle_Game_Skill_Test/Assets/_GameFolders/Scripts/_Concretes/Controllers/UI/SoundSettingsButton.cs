@@ -1,8 +1,8 @@
-using Assignment01.Abstracts.Uis;
+using BufoGames.Abstracts.Uis;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace Assignment01.Uis
+namespace BufoGames.Uis
 {
     public class SoundSettingsButton : BaseSettingsSwitchButton
     {

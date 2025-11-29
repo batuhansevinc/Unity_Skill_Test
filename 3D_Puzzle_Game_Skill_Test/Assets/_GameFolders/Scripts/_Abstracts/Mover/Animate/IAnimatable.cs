@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assignment01.Abstract.Animate
+namespace BufoGames.Abstract.Animate
 {
     public interface IAnimatable
     {

@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using Assignment01.Managers;
+using BufoGames.Managers;
 
-public class SplashScreenController : MonoBehaviour
+namespace BufoGames.Uis
+{
+    public class SplashScreenController : MonoBehaviour
 {
     [SerializeField] Slider loadingSlider;
     [SerializeField] float loadingTime = 5f;
@@ -21,5 +23,6 @@ public class SplashScreenController : MonoBehaviour
         {
             GameManager.Instance.LoadNextLevel();
         });
+    }
     }
 }

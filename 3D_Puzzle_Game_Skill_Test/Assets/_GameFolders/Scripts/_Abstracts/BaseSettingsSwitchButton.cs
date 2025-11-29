@@ -1,11 +1,10 @@
-using Assignment01.ScriptableObjects;
 using BatuhanSevinc.Enums;
 using BatuhanSevinc.Helpers;
 using BatuhanSevinc.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assignment01.Abstracts.Uis
+namespace BufoGames.Abstracts.Uis
 {
     public abstract class BaseSettingsSwitchButton : MonoBehaviour
     {

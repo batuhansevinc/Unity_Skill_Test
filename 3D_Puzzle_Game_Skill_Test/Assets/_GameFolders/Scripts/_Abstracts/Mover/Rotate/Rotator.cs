@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Assignment01.Abstract.Rotate
+namespace BufoGames.Abstract.Rotate
 {
     public class Rotator : IRotatable
     {

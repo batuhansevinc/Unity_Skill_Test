@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34077962fe0d44e0a14edd6a95d9ad78, type: 3}
+  m_Name: Level_1
+  m_EditorClassIdentifier: Assembly-CSharp::Assignment01.Data.LevelDataSO
+  levelIndex: 1
+  gridSize: 3
+  pieces:
+  - x: 0
+    z: 2
+    pieceType: 1
+    rotation: 0
+  - x: 1
+    z: 2
+    pieceType: 3
+    rotation: 270
+  - x: 0
+    z: 1
+    pieceType: 4
+    rotation: 90
+  - x: 0
+    z: 0
+    pieceType: 2
+    rotation: 0
+  - x: 2
+    z: 2
+    pieceType: 4
+    rotation: 0
+  - x: 2
+    z: 1
+    pieceType: 4
+    rotation: 0
+  - x: 1
+    z: 1
+    pieceType: 3
+    rotation: 0
+  isValidated: 1
+  validationMessage: "\u2705 Level is solvable!"
+  estimatedDifficulty: 2

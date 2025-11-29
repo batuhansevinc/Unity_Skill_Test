@@ -1,6 +1,6 @@
 using System.Collections;
 using TMPro;
-using Assignment01.Managers;
+using BufoGames.Managers;
 using UnityEngine;
 
 public class UIController : MonoBehaviour

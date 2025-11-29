@@ -1,4 +1,4 @@
-namespace Assignment01.Enums
+namespace BufoGames.Enums
 {
     public enum ObjectType
     {

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e615a79a06cd463b8129cb32c5c18381, type: 3}
+  m_Name: Theme_Default
+  m_EditorClassIdentifier: Assembly-CSharp::Assignment01.Data.ThemeDataSO
+  tileAPrefab: {fileID: 5384462693812059776, guid: bdfa48ac1ff800541b8762a793e121f1, type: 3}
+  tileBPrefab: {fileID: 2487772195507187547, guid: bd93e9184b191664ab1ae1e686869843, type: 3}
+  sourcePrefab: {fileID: 4221493931266038198, guid: 47cbe7f80c4e64740be8984f4ed0e5bb, type: 3}
+  destinationPrefab: {fileID: 6559510717284065282, guid: 0d2949dd1f8ff4792b73beba5834ff87, type: 3}
+  straightPipePrefab: {fileID: 8910098082932568038, guid: 6757a8dd71d57284aaa163c813eb3bd6, type: 3}
+  cornerPipePrefab: {fileID: 135578967051411259, guid: 6e444eef62c70a848a5b5c2603f970c7, type: 3}
+  tJunctionPipePrefab: {fileID: 488795400374259646, guid: deb961aa6425736409dce1aeefaff6ab, type: 3}
+  crossPipePrefab: {fileID: 488795400374259646, guid: deb961aa6425736409dce1aeefaff6ab, type: 3}
+  pipeMaterial: {fileID: 0}
+  activePipeMaterial: {fileID: 0}

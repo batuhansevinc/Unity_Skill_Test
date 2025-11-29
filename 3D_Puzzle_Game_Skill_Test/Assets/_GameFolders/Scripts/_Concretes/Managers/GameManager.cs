@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
-namespace Assignment01.Managers
+namespace BufoGames.Managers
 {
     public class GameManager : SingletonMonoAndDontDestroy<GameManager>
     {

@@ -1,280 +1,180 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using Assignment01.Enums;
 using UnityEngine;
+using BatuhanSevinc.ScriptableObjects;
+using BufoGames.Abstract.Controllers;
+using BufoGames.Constants;
+using BufoGames.Data;
+using BufoGames.Grid;
+using BufoGames.Pieces;
+using BufoGames.Validators;
 
-namespace Assignment01.Controller
+namespace BufoGames.Controller
 {
-    public class LevelController : MonoBehaviour
+    public class LevelController : MonoBehaviour, ILevelController
     {
-        [Header("Level Endpoints")]
-        //public GameObject startCell;
-        //public GameObject endCell;
-
-        [Header("Grid Settings")]
-        [Range(1, 10)]
-        public int gridSize;
-
-        private GameObject[,] gridMatrix;
-        private List<GridCell> connectedToSource = new List<GridCell>();
-        private List<GameObject> validGroundObjects = new List<GameObject>();
-
-        const float X_INTERVAL = 0.71f;
-        const float Z_INTERVAL = 0.71f;
-
-        public class GridCell
-        {
-            public GameObject cellObject;
-            public Vector2Int gridPosition;
-            public GridCell leftNeighbor, rightNeighbor, upNeighbor, downNeighbor;
-            public List<GameObject> connectedPipes = new List<GameObject>();
-            
-
-        }
-
-        private GridCell[,] gridCells;
-        private GridCell selectedCell;
-
-        private void Start()
-        {
-            InitializeGrid();
-        }
-
-        public void InitializeGrid()
-        {
-            gridCells = new GridCell[gridSize, gridSize];
-            validGroundObjects.Clear(); // Önceki objeler varsa temizle
-
-            for (int x = 0; x < gridSize; x++)
-            {
-                for (int z = 0; z < gridSize; z++)
-                {
-                    GameObject currentObject = transform.GetChild(x * gridSize + z).gameObject;
-            
-                    // GroundObject kontrolü
-                    GroundObject groundObject = currentObject.GetComponent<GroundObject>();
-                    if (groundObject != null && groundObject.SelectedObjectType != ObjectType.None)
-                    {
-                        validGroundObjects.Add(currentObject); // Valid listesine ekle
-
-                        GridCell newCell = new GridCell();
-                        newCell.cellObject = currentObject;
-                        newCell.gridPosition = new Vector2Int(x, z);
-                        gridCells[x, z] = newCell;
-                    }
-                }
-            }
-
-            // Komşuların atanması
-            for (int x = 0; x < gridSize; x++)
-            {
-                for (int z = 0; z < gridSize; z++)
-                {
-                    GridCell currentCell = gridCells[x, z];
-                    if(currentCell == null) continue; // Eğer bu hücre null ise komşularını atlamak için
-
-                    if (x > 0 && gridCells[x - 1, z] != null)
-                        currentCell.leftNeighbor = gridCells[x - 1, z];
-                    if (x < gridSize - 1 && gridCells[x + 1, z] != null)
-                        currentCell.rightNeighbor = gridCells[x + 1, z];
-                    if (z < gridSize - 1 && gridCells[x, z + 1] != null)
-                        currentCell.upNeighbor = gridCells[x, z + 1];
-                    if (z > 0 && gridCells[x, z - 1] != null)
-                        currentCell.downNeighbor = gridCells[x, z - 1];
-                }
-            }
-        }
-
+        [SerializeField, Range(1, 10)] public int gridSize = 4;
+        [SerializeField] private GameEvent levelCompletedEvent;
+        [SerializeField] private GameEvent fireworksEvent;
+        [SerializeField] private GameEvent startEndGameAnimationsEvent;
         
-        /*private bool CheckIfGameIsCompleted()
-        {
-            List<GridCell> connectedCells = PerformBFS(GetCellFromObject(startCell));
-            foreach(GridCell cell in connectedCells)
-            {
-                //Debug.Log("Connected cell position: " + cell.gridPosition);
-            }
-            GridCell endGridCell = GetCellFromObject(endCell);
-    
-            bool isCompleted = connectedCells.Contains(endGridCell);
-            if (isCompleted)
-            {
-                Debug.Log("Game Completed!");
-            }
-    
-            return isCompleted;
-        }*/
-
+        private GridManager _gridManager;
+        private ConnectionValidator _connectionValidator;
+        private LevelGridData _gridData;
+        private List<PieceBase> _allPieces;
+        private SourceController _source;
+        private DestinationController _destination;
+        private bool _isLevelComplete;
+        private bool _isInitialized;
         
-        public int GetGridSize()
+        public bool IsLevelComplete => _isLevelComplete;
+        public int PieceCount => _allPieces?.Count ?? 0;
+        
+        public void Initialize(int size, List<PieceBase> pieces, SourceController source, DestinationController destination)
         {
-            return gridSize;
+            gridSize = size;
+            _allPieces = pieces ?? new List<PieceBase>();
+            _source = source;
+            _destination = destination;
+            
+            _gridData = new LevelGridData(gridSize);
+            _gridManager = new GridManager(gridSize);
+            _gridManager.BuildMap(_allPieces);
+            _connectionValidator = new ConnectionValidator(_gridManager, _allPieces.Count);
+            
+            SubscribeToPipeEvents();
+            _isInitialized = true;
+            
+            StartCoroutine(InitialConnectionCheck());
         }
-        public float GetXInterval()
+        
+        public void SetGameEvents(GameEvent levelCompleted, GameEvent fireworks, GameEvent startEndAnimations)
         {
-            return X_INTERVAL;
+            levelCompletedEvent = levelCompleted;
+            fireworksEvent = fireworks;
+            startEndGameAnimationsEvent = startEndAnimations;
         }
-
-        public float GetZInterval()
+        
+        private void SubscribeToPipeEvents()
         {
-            return Z_INTERVAL;
-        }
-
-
-        /*private void Update()
-        {
-            if (gridCells == null) return;
-
-            if (Input.GetMouseButtonDown(0))
+            foreach (var piece in _allPieces)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (CheckIfGameIsCompleted())
+                if (piece is PipeController pipe)
                 {
-                    Debug.Log("Game Completed!");
-                    // Oyunu tamamlama işlemlerini burada yapabilirsiniz.
+                    pipe.OnRotationCompleted.AddListener(OnPieceRotated);
                 }
-
-                if (Physics.Raycast(ray, out hit))
+                else if (piece is SourceController source)
                 {
-                    GridCell cell = GetCellFromObject(hit.transform.gameObject);
-                    if (cell != null)
-                    {
-                        selectedCell = cell;
-
-                        if (cell == gridCells[0, 0])
-                        {
-                            List<GridCell> newConnectedToSource = PerformBFS(cell);
-                            connectedToSource.Clear();
-                            connectedToSource.AddRange(newConnectedToSource);
-                            foreach (GridCell connectedCell in connectedToSource)
-                            {
-                                // Eğer borunuz için animasyon kodu varsa buraya ekleyebilirsiniz.
-                            }
-                        }
-                    }
+                    source.OnRotationCompleted.AddListener(OnPieceRotated);
                 }
-            }
-        }*/
-
-        /*private List<GridCell> PerformBFS(GridCell startCell)
-        {
-            List<GridCell> connectedCells = new List<GridCell>();
-            Queue<GridCell> queue = new Queue<GridCell>();
-            HashSet<GridCell> visited = new HashSet<GridCell>();
-
-            queue.Enqueue(startCell);
-            visited.Add(startCell);
-
-            while (queue.Count > 0)
-            {
-                GridCell currentCell = queue.Dequeue();
-                connectedCells.Add(currentCell);
-
-                foreach (GridCell neighbor in GetConnectedNeighbors(currentCell))
+                else if (piece is DestinationController dest)
                 {
-                    if (!visited.Contains(neighbor))
-                    {
-                        visited.Add(neighbor);
-                        queue.Enqueue(neighbor);
-                    }
-                }
-            }
-
-            return connectedCells;
-        }*/
-
-        /*private IEnumerable<GridCell> GetConnectedNeighbors(GridCell cell)
-        {
-            List<GridCell> connectedNeighbors = new List<GridCell>();
-
-            if (IsConnected(cell, cell.leftNeighbor))
-                connectedNeighbors.Add(cell.leftNeighbor);
-            if (IsConnected(cell, cell.rightNeighbor))
-                connectedNeighbors.Add(cell.rightNeighbor);
-            if (IsConnected(cell, cell.upNeighbor))
-                connectedNeighbors.Add(cell.upNeighbor);
-            if (IsConnected(cell, cell.downNeighbor))
-                connectedNeighbors.Add(cell.downNeighbor);
-
-            return connectedNeighbors;
-        }*/
-
-        private bool IsConnected(GridCell cellA, GridCell cellB)
-        {
-            if (cellA == null || cellB == null)
-                return false;
-
-            GameObject objectA = cellA.cellObject;
-            GameObject objectB = cellB.cellObject;
-
-            GroundObject groundObjectA = objectA.GetComponent<GroundObject>();
-            GroundObject groundObjectB = objectB.GetComponent<GroundObject>();
-
-            // Kaynak objesi için kontrol
-            if (groundObjectA.SelectedObjectType == ObjectType.A)
-            {
-                if (groundObjectA.GetFacingDirection() == GroundObject.Direction.Down && groundObjectB.GetFacingDirection() == GroundObject.Direction.Up)
-                    return true;
-            }
-    
-            // Boru objesi için kontrol
-            if (groundObjectA.SelectedObjectType == ObjectType.Pipe)
-            {
-                if ((groundObjectA.GetFacingDirection() == GroundObject.Direction.Up && groundObjectB.GetFacingDirection() == GroundObject.Direction.Down) ||
-                    (groundObjectA.GetFacingDirection() == GroundObject.Direction.Down && groundObjectB.GetFacingDirection() == GroundObject.Direction.Up))
-                    return true;
-            }
-
-            // A objesi için kontrol (Sadece aşağı yönlü bağlantı kabul edilir)
-            if (groundObjectA.SelectedObjectType == ObjectType.A && groundObjectB.GetFacingDirection() == GroundObject.Direction.Down)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Pipe"))
-            {
-                GridCell thisCell = GetCellFromObject(this.transform.GetChild(0).transform.GetChild(0).gameObject);
-                if (thisCell != null)
-                {
-                    thisCell.connectedPipes.Add(other.gameObject);
+                    dest.OnRotationCompleted.AddListener(OnPieceRotated);
                 }
             }
         }
-
-        private GridCell GetCellFromObject(GameObject obj)
+        
+        private void UnsubscribeFromPipeEvents()
         {
-            for (int x = 0; x < gridSize; x++)
+            if (_allPieces == null) return;
+            
+            foreach (var piece in _allPieces)
             {
-                for (int z = 0; z < gridSize; z++)
+                if (piece is PipeController pipe)
                 {
-                    if (gridCells[x, z] != null && gridCells[x, z].cellObject == obj)
-                    {
-                        return gridCells[x, z];
-                    }
+                    pipe.OnRotationCompleted.RemoveListener(OnPieceRotated);
+                }
+                else if (piece is SourceController source)
+                {
+                    source.OnRotationCompleted.RemoveListener(OnPieceRotated);
+                }
+                else if (piece is DestinationController dest)
+                {
+                    dest.OnRotationCompleted.RemoveListener(OnPieceRotated);
                 }
             }
-            return null;
         }
-
-
-        private void OnDrawGizmos()
+        
+        private IEnumerator InitialConnectionCheck()
         {
-            if (connectedToSource != null)
+            yield return null;
+            CheckLevelCompletion();
+        }
+        
+        public int GetGridSize() => gridSize;
+        
+        public float GetXInterval() => _gridData?.XInterval ?? LevelConstants.X_INTERVAL;
+        
+        public float GetZInterval() => _gridData?.ZInterval ?? LevelConstants.Z_INTERVAL;
+        
+        public void InitializeLevel()
+        {
+            if (!_isInitialized)
             {
-                Gizmos.color = Color.green;
-
-                foreach (var connectedCell in connectedToSource)
-                {
-                    Gizmos.DrawSphere(connectedCell.cellObject.transform.position, 0.25f);
-                }
+                StartCoroutine(LateInitialize());
             }
+        }
+        
+        private IEnumerator LateInitialize()
+        {
+            yield return new WaitForSeconds(LevelConstants.INITIALIZATION_DELAY);
+            
+            if (!_isInitialized)
+            {
+                _gridData = new LevelGridData(gridSize);
+            }
+        }
+        
+        public void CheckLevelCompletion()
+        {
+            if (!_isInitialized || _isLevelComplete) return;
+            if (_source == null || _allPieces == null || _allPieces.Count == 0) return;
+            
+            bool allConnected = _connectionValidator.ValidateAllConnections(_source, _allPieces);
+            
+            if (allConnected)
+            {
+                _isLevelComplete = true;
+                StartCoroutine(OnLevelCompleted());
+            }
+        }
+        
+        private void OnPieceRotated()
+        {
+            CheckLevelCompletion();
+        }
+        
+        public LevelGridData GetGridData() => _gridData;
+        
+        public void CheckConnectionsFromSource()
+        {
+            CheckLevelCompletion();
+        }
+        
+        public PieceBase GetPieceAt(int x, int z)
+        {
+            return _gridManager?.GetPieceAt(x, z);
+        }
+        
+        public string GetConnectionStats()
+        {
+            if (_connectionValidator == null) return "Not initialized";
+            return $"{_connectionValidator.LastConnectedCount}/{_connectionValidator.LastTotalCount} connected";
+        }
+        
+        private IEnumerator OnLevelCompleted()
+        {
+            startEndGameAnimationsEvent?.InvokeEvents();
+            
+            yield return new WaitForSeconds(LevelConstants.COMPLETION_ANIMATION_DURATION);
+            
+            fireworksEvent?.InvokeEvents();
+            levelCompletedEvent?.InvokeEvents();
+        }
+        
+        private void OnDestroy()
+        {
+            UnsubscribeFromPipeEvents();
         }
     }
 }

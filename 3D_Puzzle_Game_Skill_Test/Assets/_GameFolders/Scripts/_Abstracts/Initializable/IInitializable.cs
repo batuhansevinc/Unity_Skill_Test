@@ -1,15 +1,15 @@
-using Assignment01.Enums;
-using Assignment01.Controller;
+using BufoGames.Data;
+using BufoGames.Enums;
 using UnityEngine;
 
-namespace Assignment01.Abstract.Initialize
+namespace BufoGames.Abstract.Initialize
 {
     public interface IInitializable
     {
         void Initialize();
         void SetObjectType(ObjectType type);
-        void SetPipeType(PipeTypeSO pipeType);
+        void SetPipeType(PieceType pipeType);
         GameObject GetCurrentObjectInstance();
-
     }
 }
+

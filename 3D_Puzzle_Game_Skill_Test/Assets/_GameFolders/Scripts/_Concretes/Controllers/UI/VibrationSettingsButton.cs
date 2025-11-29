@@ -1,6 +1,6 @@
-using Assignment01.Abstracts.Uis;
+using BufoGames.Abstracts.Uis;
 
-namespace Assignment01.Uis
+namespace BufoGames.Uis
 {
     public class VibrationSettingsButton : BaseSettingsSwitchButton
     {
