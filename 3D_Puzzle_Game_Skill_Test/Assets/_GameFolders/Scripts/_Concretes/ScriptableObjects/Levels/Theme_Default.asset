@@ -20,5 +20,10 @@ MonoBehaviour:
   cornerPipePrefab: {fileID: 135578967051411259, guid: 6e444eef62c70a848a5b5c2603f970c7, type: 3}
   tJunctionPipePrefab: {fileID: 488795400374259646, guid: deb961aa6425736409dce1aeefaff6ab, type: 3}
   crossPipePrefab: {fileID: 488795400374259646, guid: deb961aa6425736409dce1aeefaff6ab, type: 3}
+  staticStraightPipePrefab: {fileID: 8172165234246306662, guid: 2fa09a7db730c4fffa095df121d84648, type: 3}
+  staticCornerPipePrefab: {fileID: 2116329098456577220, guid: dec0f8e7fc1dd44fc8629c4cb12256a5, type: 3}
+  staticTJunctionPipePrefab: {fileID: 5442623953287062574, guid: 8bd22e2e3aa074143b2327458c1ba319, type: 3}
+  staticCrossPipePrefab: {fileID: 0}
   pipeMaterial: {fileID: 0}
   activePipeMaterial: {fileID: 0}
+  staticPipeMaterial: {fileID: 0}

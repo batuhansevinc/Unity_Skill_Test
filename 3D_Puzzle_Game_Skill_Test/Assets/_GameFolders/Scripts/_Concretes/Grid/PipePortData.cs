@@ -43,6 +43,11 @@ namespace BufoGames.Grid
                 PieceType.CrossPipe => CrossPorts,
                 PieceType.Source => SourcePorts,
                 PieceType.Destination => DestinationPorts,
+                // Static pipes use same port data as rotatable counterparts
+                PieceType.StaticStraightPipe => StraightPorts,
+                PieceType.StaticCornerPipe => CornerPorts,
+                PieceType.StaticTJunctionPipe => TJunctionPorts,
+                PieceType.StaticCrossPipe => CrossPorts,
                 _ => EmptyPorts
             };
         }
@@ -60,6 +65,11 @@ namespace BufoGames.Grid
                 PieceType.CrossPipe => 4,
                 PieceType.Source => 1,
                 PieceType.Destination => 1,
+                // Static pipes
+                PieceType.StaticStraightPipe => 2,
+                PieceType.StaticCornerPipe => 2,
+                PieceType.StaticTJunctionPipe => 3,
+                PieceType.StaticCrossPipe => 4,
                 _ => 0
             };
         }

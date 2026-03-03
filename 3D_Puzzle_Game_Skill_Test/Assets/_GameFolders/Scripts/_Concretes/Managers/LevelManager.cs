@@ -109,6 +109,21 @@ namespace BufoGames.Managers
             }
             
             currentLevelIndex = levelIndex;
+            
+            // Disable input during spawn animation
+            var inputManager = FindObjectOfType<InputManager>();
+            if (inputManager != null)
+                inputManager.SetInputEnabled(false);
+            
+            // Play rain drop spawn animation
+            levelGenerator.PlaySpawnAnimation(() =>
+            {
+                if (inputManager != null)
+                    inputManager.SetInputEnabled(true);
+                
+                if (currentLevelController != null)
+                    currentLevelController.OnSpawnAnimationComplete();
+            });
         }
         
         public void MoveToNextLevel()

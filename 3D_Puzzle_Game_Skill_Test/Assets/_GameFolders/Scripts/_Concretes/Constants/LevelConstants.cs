@@ -18,6 +18,14 @@
         public const float DEFAULT_ROTATION_DURATION = 0.5f;
         public const float DEFAULT_SCALE_DURATION = 0.15f;
         
+        // Spawn Animation Constants
+        public const float SPAWN_DROP_HEIGHT = 3f;
+        public const float TILE_DROP_DURATION = 0.55f;
+        public const float PIECE_DROP_DURATION = 0.35f;
+        public const float SPAWN_STAGGER_INTERVAL = 0.02f;
+        public const float SPAWN_TOTAL_MAX_DURATION = 1f;
+        public const float PHASE_GAP = 0.1f;
+        
         // Tag Constants
         public const string SOURCE_TAG = "Source";
         public const string DESTINATION_TAG = "Destination";

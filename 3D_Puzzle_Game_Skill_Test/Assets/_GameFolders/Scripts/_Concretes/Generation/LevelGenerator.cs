@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using BufoGames.Constants;
 using BufoGames.Controller;
 using BufoGames.Data;
@@ -15,11 +17,15 @@ namespace BufoGames.Generation
         private List<PieceBase> _spawnedPieces = new List<PieceBase>();
         private Dictionary<(int x, int z), TileController> _tileMap = new Dictionary<(int, int), TileController>();
         private SourceController _sourceController;
-        private DestinationController _destinationController;
+        private List<DestinationController> _destinationControllers = new List<DestinationController>();
+
+        private List<(Transform transform, float finalY)> _tileTransforms = new List<(Transform, float)>();
+        private List<(Transform transform, float finalY)> _pieceTransforms = new List<(Transform, float)>();
+        private Sequence _spawnSequence;
 
         public List<PieceBase> SpawnedPieces => _spawnedPieces;
         public SourceController SourceController => _sourceController;
-        public DestinationController DestinationController => _destinationController;
+        public List<DestinationController> DestinationControllers => _destinationControllers;
 
         public void SetDefaultTheme(ThemeDataSO theme)
         {
@@ -33,7 +39,10 @@ namespace BufoGames.Generation
             _spawnedPieces.Clear();
             _tileMap.Clear();
             _sourceController = null;
-            _destinationController = null;
+            _destinationControllers.Clear();
+            _tileTransforms.Clear();
+            _pieceTransforms.Clear();
+            KillSpawnAnimation();
 
             GameObject levelRoot = new GameObject($"Level_{levelData.levelIndex}");
 
@@ -49,28 +58,33 @@ namespace BufoGames.Generation
             SpawnPieces(piecesParent, levelData, theme);
 
             LevelController controller = levelRoot.AddComponent<LevelController>();
-            controller.Initialize(levelData.gridSize, _spawnedPieces, _sourceController, _destinationController);
+            controller.Initialize(levelData.gridWidth, levelData.gridHeight, _spawnedPieces, _sourceController, _destinationControllers);
 
             return levelRoot;
         }
 
         private void GenerateTiles(GameObject parent, LevelDataSO levelData, ThemeDataSO theme)
         {
-            int gridSize = levelData.gridSize;
+            int gridWidth = levelData.gridWidth;
+            int gridHeight = levelData.gridHeight;
 
-            for (int x = 0; x < gridSize; x++)
+            for (int x = 0; x < gridWidth; x++)
             {
-                for (int z = 0; z < gridSize; z++)
+                for (int z = 0; z < gridHeight; z++)
                 {
                     GameObject tilePrefab = ((x + z) % 2 == 0) ? theme.tileAPrefab : theme.tileBPrefab;
                     if (tilePrefab == null) continue;
 
                     Vector3 position = GetGridPosition(x, z);
-                    GameObject tile = Instantiate(tilePrefab, position, Quaternion.identity, parent.transform);
+                    Vector3 spawnPosition = new Vector3(position.x, position.y + LevelConstants.SPAWN_DROP_HEIGHT, position.z);
+                    GameObject tile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity, parent.transform);
                     tile.name = $"Tile_{x}_{z}";
+                    tile.transform.localScale = Vector3.zero;
 
                     TileController tileController = tile.AddComponent<TileController>();
+                    tileController.SetOriginalPosition(position);
                     _tileMap[(x, z)] = tileController;
+                    _tileTransforms.Add((tile.transform, position.y));
                 }
             }
         }
@@ -89,9 +103,12 @@ namespace BufoGames.Generation
             if (prefab == null) return;
 
             Vector3 position = GetGridPosition(pieceData.x, pieceData.z);
-            GameObject instance = Instantiate(prefab, position, Quaternion.identity, parent.transform);
+            Vector3 spawnPosition = new Vector3(position.x, position.y + LevelConstants.SPAWN_DROP_HEIGHT, position.z);
+            GameObject instance = Instantiate(prefab, spawnPosition, Quaternion.identity, parent.transform);
             instance.name = $"{pieceData.pieceType}_{pieceData.x}_{pieceData.z}";
+            instance.transform.localScale = Vector3.zero;
 
+            _pieceTransforms.Add((instance.transform, position.y));
             ConfigurePiece(instance, pieceData);
         }
 
@@ -148,7 +165,7 @@ namespace BufoGames.Generation
             dest.SetInitialRotation(pieceData.rotation);
             EnsureCollider(instance);
 
-            _destinationController = dest;
+            _destinationControllers.Add(dest);
             _spawnedPieces.Add(dest);
         }
 
@@ -164,6 +181,13 @@ namespace BufoGames.Generation
             pipe.SetGridPosition(pieceData.x, pieceData.z);
             AssignTileController(pipe, pieceData.x, pieceData.z);
             pipe.SetInitialRotation(pieceData.rotation);
+            
+            // Mark as static if it's a static pipe type
+            if (pieceData.pieceType.IsStatic())
+            {
+                pipe.SetStatic(true);
+            }
+            
             EnsureCollider(instance);
 
             _spawnedPieces.Add(pipe);
@@ -218,6 +242,82 @@ namespace BufoGames.Generation
                 0,
                 z * LevelConstants.Z_INTERVAL
             );
+        }
+
+        public void PlaySpawnAnimation(Action onComplete)
+        {
+            KillSpawnAnimation();
+
+            if (_tileTransforms.Count == 0 && _pieceTransforms.Count == 0)
+            {
+                onComplete?.Invoke();
+                return;
+            }
+
+            ShuffleList(_tileTransforms);
+            ShuffleList(_pieceTransforms);
+
+            _spawnSequence = DOTween.Sequence();
+
+            // --- Phase 1: Tiles drop with a single soft bounce ---
+            float tileStagger = Mathf.Min(
+                LevelConstants.SPAWN_STAGGER_INTERVAL,
+                LevelConstants.SPAWN_TOTAL_MAX_DURATION / Mathf.Max(1, _tileTransforms.Count)
+            );
+            float tileDuration = LevelConstants.TILE_DROP_DURATION;
+
+            for (int i = 0; i < _tileTransforms.Count; i++)
+            {
+                var (t, finalY) = _tileTransforms[i];
+                if (t == null) continue;
+
+                float insertTime = i * tileStagger;
+                // Smooth drop with one gentle settle (OutQuart for minimal overshoot)
+                _spawnSequence.Insert(insertTime, t.DOMoveY(finalY, tileDuration).SetEase(Ease.OutQuart));
+                _spawnSequence.Insert(insertTime, t.DOScale(Vector3.one, tileDuration * 0.4f).SetEase(Ease.OutBack));
+            }
+
+            // --- Phase 2: Pieces drop cleanly after all tiles have landed ---
+            float tilesEndTime = (_tileTransforms.Count - 1) * tileStagger + tileDuration + LevelConstants.PHASE_GAP;
+
+            float pieceStagger = Mathf.Min(
+                LevelConstants.SPAWN_STAGGER_INTERVAL,
+                LevelConstants.SPAWN_TOTAL_MAX_DURATION / Mathf.Max(1, _pieceTransforms.Count)
+            );
+            float pieceDuration = LevelConstants.PIECE_DROP_DURATION;
+
+            for (int i = 0; i < _pieceTransforms.Count; i++)
+            {
+                var (t, finalY) = _pieceTransforms[i];
+                if (t == null) continue;
+
+                float insertTime = tilesEndTime + i * pieceStagger;
+                // Clean drop, no bounce — single smooth motion
+                _spawnSequence.Insert(insertTime, t.DOMoveY(finalY, pieceDuration).SetEase(Ease.OutCubic));
+                _spawnSequence.Insert(insertTime, t.DOScale(Vector3.one, pieceDuration * 0.4f).SetEase(Ease.OutCubic));
+            }
+
+            _spawnSequence.OnComplete(() => onComplete?.Invoke());
+        }
+
+        public void KillSpawnAnimation()
+        {
+            _spawnSequence?.Kill();
+            _spawnSequence = null;
+        }
+
+        private void ShuffleList<T>(List<T> list)
+        {
+            for (int i = list.Count - 1; i > 0; i--)
+            {
+                int j = UnityEngine.Random.Range(0, i + 1);
+                (list[i], list[j]) = (list[j], list[i]);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            KillSpawnAnimation();
         }
     }
 }

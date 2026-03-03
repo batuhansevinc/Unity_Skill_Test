@@ -13,7 +13,8 @@ namespace BufoGames.Controller
 {
     public class LevelController : MonoBehaviour, ILevelController
     {
-        [SerializeField, Range(1, 10)] public int gridSize = 4;
+        [SerializeField, Range(1, 12)] public int gridWidth = 4;
+        [SerializeField, Range(1, 12)] public int gridHeight = 4;
         [SerializeField] private GameEvent levelCompletedEvent;
         [SerializeField] private GameEvent fireworksEvent;
         [SerializeField] private GameEvent startEndGameAnimationsEvent;
@@ -23,28 +24,39 @@ namespace BufoGames.Controller
         private LevelGridData _gridData;
         private List<PieceBase> _allPieces;
         private SourceController _source;
-        private DestinationController _destination;
+        private List<DestinationController> _destinations;
         private bool _isLevelComplete;
         private bool _isInitialized;
         
         public bool IsLevelComplete => _isLevelComplete;
         public int PieceCount => _allPieces?.Count ?? 0;
+        public int GridWidth => gridWidth;
+        public int GridHeight => gridHeight;
+        public int DestinationCount => _destinations?.Count ?? 0;
+        public int ConnectedDestinationCount => _connectionValidator?.LastConnectedDestinations ?? 0;
         
-        public void Initialize(int size, List<PieceBase> pieces, SourceController source, DestinationController destination)
+        public void Initialize(int width, int height, List<PieceBase> pieces, SourceController source, List<DestinationController> destinations)
         {
-            gridSize = size;
+            gridWidth = width;
+            gridHeight = height;
             _allPieces = pieces ?? new List<PieceBase>();
             _source = source;
-            _destination = destination;
+            _destinations = destinations ?? new List<DestinationController>();
             
-            _gridData = new LevelGridData(gridSize);
-            _gridManager = new GridManager(gridSize);
+            _gridData = new LevelGridData(gridWidth, gridHeight);
+            _gridManager = new GridManager(gridWidth, gridHeight);
             _gridManager.BuildMap(_allPieces);
             _connectionValidator = new ConnectionValidator(_gridManager, _allPieces.Count);
             
             SubscribeToPipeEvents();
             _isInitialized = true;
-            
+        }
+        
+        /// <summary>
+        /// Called after spawn animation completes to run the initial connection check.
+        /// </summary>
+        public void OnSpawnAnimationComplete()
+        {
             StartCoroutine(InitialConnectionCheck());
         }
         
@@ -101,7 +113,8 @@ namespace BufoGames.Controller
             CheckLevelCompletion();
         }
         
-        public int GetGridSize() => gridSize;
+        public int GetGridWidth() => gridWidth;
+        public int GetGridHeight() => gridHeight;
         
         public float GetXInterval() => _gridData?.XInterval ?? LevelConstants.X_INTERVAL;
         
@@ -121,7 +134,7 @@ namespace BufoGames.Controller
             
             if (!_isInitialized)
             {
-                _gridData = new LevelGridData(gridSize);
+                _gridData = new LevelGridData(gridWidth, gridHeight);
             }
         }
         
@@ -130,9 +143,9 @@ namespace BufoGames.Controller
             if (!_isInitialized || _isLevelComplete) return;
             if (_source == null || _allPieces == null || _allPieces.Count == 0) return;
             
-            bool allConnected = _connectionValidator.ValidateAllConnections(_source, _allPieces);
+            _connectionValidator.ValidateAllConnections(_source, _allPieces);
             
-            if (allConnected)
+            if (_connectionValidator.AreAllDestinationsConnected())
             {
                 _isLevelComplete = true;
                 StartCoroutine(OnLevelCompleted());
@@ -159,7 +172,8 @@ namespace BufoGames.Controller
         public string GetConnectionStats()
         {
             if (_connectionValidator == null) return "Not initialized";
-            return $"{_connectionValidator.LastConnectedCount}/{_connectionValidator.LastTotalCount} connected";
+            return $"Destinations: {_connectionValidator.LastConnectedDestinations}/{_connectionValidator.LastTotalDestinations} | " +
+                   $"Pipes: {_connectionValidator.LastConnectedCount}/{_connectionValidator.LastTotalCount}";
         }
         
         private IEnumerator OnLevelCompleted()

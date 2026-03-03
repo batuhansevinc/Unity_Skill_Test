@@ -1,0 +1,40 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace BufoGames.Data
+{
+    public class LevelValidator
+    {
+        private LevelDataSO _levelData;
+        private string _validationMessage;
+        private int _estimatedDifficulty;
+        private int _minimumMoves;
+        private List<int> _solutionMoves;
+
+        private const int MAX_TIME_MS = 30000; // 30s timeout guard
+        private const string TIMEOUT_MESSAGE = "Validation timed out. Try simplifying the level or lowering the complexity.";
+
+        private byte[] _rotationState;
+        private byte[] _solutionRotation;
+        private byte[] _initialRotation;
+        private PieceData[] _pieceDataCache;
+        private int _pieceCount;
+        private Vector2Int _sourcePos;
+        private List<Vector2Int> _destPositions;
+        private int _gridWidth;
+        private int _gridHeight;
+        private int _gridSize;
+        
+        private bool[] _visited;
+        private int[] _bfsQueue;
+        
+        private List<int> _rotatableIndices;
+        private bool _solutionFound;
+        private int _iterationCount;
+        private const int MAX_ITERATIONS = 1000000;
+        
+        // Constraint propagation
+        private byte[][] _validRotations; // Per piece: which rotations are still valid

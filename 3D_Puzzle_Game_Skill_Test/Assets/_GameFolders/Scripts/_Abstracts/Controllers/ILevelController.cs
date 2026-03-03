@@ -2,13 +2,19 @@
 {
     /// <summary>
     /// Interface for level controller implementations
+    /// Supports asymmetric grids (e.g., 3x5, 4x6)
     /// </summary>
     public interface ILevelController
     {
         /// <summary>
-        /// Get the current grid size
+        /// Get the grid width (X axis / columns)
         /// </summary>
-        int GetGridSize();
+        int GetGridWidth();
+        
+        /// <summary>
+        /// Get the grid height (Z axis / rows)
+        /// </summary>
+        int GetGridHeight();
         
         /// <summary>
         /// Get X interval between grid cells

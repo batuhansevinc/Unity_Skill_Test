@@ -50,31 +50,31 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Boolean_3642CAF8: 1
-    - Boolean_51494403: 1
+    - Boolean_3642CAF8: 0
+    - Boolean_51494403: 0
     - Boolean_7D146A9B: 0
-    - Boolean_8195AB04: 1
+    - Boolean_8195AB04: 0
     - Boolean_81A86F44: 0
-    - Vector1_150C867D: 0
+    - Vector1_150C867D: 1.23
     - Vector1_2589A33D: 0.5
-    - Vector1_47ABB6CE: 0.5
+    - Vector1_47ABB6CE: 0.39
     - Vector1_4C81FDE9: 0
     - Vector1_5CFC229D: 0.005
-    - Vector1_756CD72E: 1
+    - Vector1_756CD72E: 8.21
     - Vector1_89E72A66: 5
-    - Vector1_8F08E6AF: 0
+    - Vector1_8F08E6AF: 0.66
     - Vector1_B3E4AEB4: 0.1
-    - Vector1_B87F0175: 10
-    - Vector1_C6207B7E: 1
+    - Vector1_B87F0175: 11.03
+    - Vector1_C6207B7E: 1.95
     - Vector1_E71D33EA: 1
-    - Vector1_EDFED8F0: 5
+    - Vector1_EDFED8F0: 6.69
     - _QueueControl: 0
     - _QueueOffset: 0
     - _XRMotionVectorsPass: 1
     m_Colors:
     - Color_60C3C880: {r: 1, g: 1, b: 1, a: 0}
-    - Color_701A469: {r: 0.2409665, g: 0.6123667, b: 0.8962264, a: 0}
-    - Color_70CB5AC5: {r: 0.1744393, g: 0.3936995, b: 0.754717, a: 0}
+    - Color_701A469: {r: 0.8584906, g: 0.72767776, b: 0.58717513, a: 0}
+    - Color_70CB5AC5: {r: 1, g: 1, b: 1, a: 0}
     - Vector2_71C24621: {r: 0.1, g: 0.1, b: 0, a: 0}
     - Vector2_E4C72AD2: {r: 0.1, g: 0.1, b: 0, a: 0}
     - Vector2_FE0C2D14: {r: 0.05, g: 0.05, b: 0, a: 0}

@@ -12,6 +12,7 @@ namespace BufoGames.Pieces
         [SerializeField] private Transform visualTransform;
         [SerializeField] private float rotationDuration = 0.25f;
         [SerializeField] private Ease rotationEase = Ease.OutBack;
+        [SerializeField] private bool isStatic = false;
         
         public UnityEvent OnRotationStarted;
         public UnityEvent OnRotationCompleted;
@@ -22,10 +23,18 @@ namespace BufoGames.Pieces
         public override PieceType PieceType => pieceType;
         public override int CurrentRotation => currentRotation;
         public bool IsRotating => _isRotating;
+        public bool IsStatic => isStatic;
         
         public void SetPieceType(PieceType type)
         {
             pieceType = type;
+            // Auto-set static flag based on type
+            isStatic = type.IsStatic();
+        }
+        
+        public void SetStatic(bool value)
+        {
+            isStatic = value;
         }
         
         public void SetInitialRotation(int rotation)
@@ -36,6 +45,9 @@ namespace BufoGames.Pieces
         
         public void Rotate()
         {
+            // Static pipes cannot rotate
+            if (isStatic) return;
+            
             if (_isRotating && _rotationTween != null && _rotationTween.IsActive())
             {
                 _rotationTween.Complete();
@@ -54,6 +66,14 @@ namespace BufoGames.Pieces
                 .DOLocalRotate(targetEuler, rotationDuration, RotateMode.Fast)
                 .SetEase(rotationEase)
                 .OnComplete(OnRotationAnimationComplete);
+        }
+        
+        /// <summary>
+        /// Check if this pipe can be rotated by the player
+        /// </summary>
+        public bool CanRotate()
+        {
+            return !isStatic && !_isRotating;
         }
         
         private void OnRotationAnimationComplete()

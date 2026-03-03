@@ -6,18 +6,23 @@ namespace BufoGames.Grid
     /// <summary>
     /// Manages grid-based piece lookup
     /// O(1) position-to-piece lookup using dictionary
+    /// Supports asymmetric grids (e.g., 3x5, 4x6)
     /// </summary>
     public class GridManager
     {
         private Dictionary<(int x, int z), PieceBase> _pieceMap;
-        private int _gridSize;
+        private int _gridWidth;
+        private int _gridHeight;
         
-        public int GridSize => _gridSize;
+        public int GridWidth => _gridWidth;
+        public int GridHeight => _gridHeight;
+        public int GridArea => _gridWidth * _gridHeight;
         
-        public GridManager(int gridSize)
+        public GridManager(int width, int height)
         {
-            _gridSize = gridSize;
-            _pieceMap = new Dictionary<(int, int), PieceBase>(gridSize * gridSize);
+            _gridWidth = width;
+            _gridHeight = height;
+            _pieceMap = new Dictionary<(int, int), PieceBase>(width * height);
         }
         
         /// <summary>
@@ -90,7 +95,7 @@ namespace BufoGames.Grid
         /// </summary>
         public bool IsValidPosition(int x, int z)
         {
-            return x >= 0 && x < _gridSize && z >= 0 && z < _gridSize;
+            return x >= 0 && x < _gridWidth && z >= 0 && z < _gridHeight;
         }
         
         /// <summary>

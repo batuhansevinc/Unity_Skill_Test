@@ -5,17 +5,25 @@ namespace BufoGames.Tiles
 {
     public class TileController : MonoBehaviour
     {
-        [SerializeField] private float bounceHeight = 0.08f;
+        [SerializeField] private float bounceHeight = 0.20f;
         [SerializeField] private float bounceDuration = 0.25f;
         [SerializeField] private Ease downEase = Ease.OutSine;
         [SerializeField] private Ease upEase = Ease.OutSine;
         
         private Tween _bounceTween;
         private Vector3 _originalPosition;
+        private bool _originalPositionSet;
 
         private void Start()
         {
-            _originalPosition = transform.position;
+            if (!_originalPositionSet)
+                _originalPosition = transform.position;
+        }
+
+        public void SetOriginalPosition(Vector3 position)
+        {
+            _originalPosition = position;
+            _originalPositionSet = true;
         }
 
         public void PlayBounce()

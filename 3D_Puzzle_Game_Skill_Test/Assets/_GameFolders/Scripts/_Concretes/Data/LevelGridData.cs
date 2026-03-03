@@ -5,20 +5,27 @@ namespace BufoGames.Data
 {
     /// <summary>
     /// Encapsulates all grid-related data and calculations for a level
+    /// Supports asymmetric grids (e.g., 3x5, 4x6)
     /// </summary>
     [System.Serializable]
     public class LevelGridData
     {
-        [SerializeField, Range(1, 10)] 
-        private int gridSize = 4;
+        [SerializeField, Range(1, 12)] 
+        private int gridWidth = 4;   // X ekseni (sütun sayısı)
         
-        public int GridSize => gridSize;
+        [SerializeField, Range(1, 12)] 
+        private int gridHeight = 4;  // Z ekseni (satır sayısı)
+        
+        public int GridWidth => gridWidth;
+        public int GridHeight => gridHeight;
+        public int GridArea => gridWidth * gridHeight;
         public float XInterval => LevelConstants.X_INTERVAL;
         public float ZInterval => LevelConstants.Z_INTERVAL;
         
-        public LevelGridData(int size)
+        public LevelGridData(int width, int height)
         {
-            gridSize = Mathf.Clamp(size, 1, 10);
+            gridWidth = Mathf.Clamp(width, 1, 12);
+            gridHeight = Mathf.Clamp(height, 1, 12);
         }
         
         /// <summary>
@@ -30,19 +37,35 @@ namespace BufoGames.Data
         }
         
         /// <summary>
-        /// Calculate maximum X coordinate based on grid size
+        /// Check if position is within grid bounds
         /// </summary>
-        public float GetMaxX()
+        public bool IsValidPosition(int x, int z)
         {
-            return (gridSize - 1) * XInterval;
+            return x >= 0 && x < gridWidth && z >= 0 && z < gridHeight;
         }
         
         /// <summary>
-        /// Calculate maximum Z coordinate based on grid size
+        /// Calculate maximum X coordinate based on grid width
+        /// </summary>
+        public float GetMaxX()
+        {
+            return (gridWidth - 1) * XInterval;
+        }
+        
+        /// <summary>
+        /// Calculate maximum Z coordinate based on grid height
         /// </summary>
         public float GetMaxZ()
         {
-            return (gridSize - 1) * ZInterval;
+            return (gridHeight - 1) * ZInterval;
+        }
+        
+        /// <summary>
+        /// Get center position of the grid
+        /// </summary>
+        public Vector3 GetCenterPosition()
+        {
+            return new Vector3(GetMaxX() / 2f, 0, GetMaxZ() / 2f);
         }
         
         /// <summary>
@@ -50,9 +73,7 @@ namespace BufoGames.Data
         /// </summary>
         public Vector3 GetUpTargetPosition()
         {
-            float maxX = GetMaxX();
-            float maxZ = GetMaxZ();
-            return new Vector3(maxX / 2f, 0, maxZ + ZInterval);
+            return new Vector3(GetMaxX() / 2f, 0, GetMaxZ() + ZInterval);
         }
         
         /// <summary>
@@ -60,8 +81,7 @@ namespace BufoGames.Data
         /// </summary>
         public Vector3 GetDownTargetPosition()
         {
-            float maxX = GetMaxX();
-            return new Vector3(maxX / 2f, 0, -ZInterval);
+            return new Vector3(GetMaxX() / 2f, 0, -ZInterval);
         }
         
         /// <summary>
@@ -69,8 +89,7 @@ namespace BufoGames.Data
         /// </summary>
         public Vector3 GetLeftTargetPosition()
         {
-            float maxZ = GetMaxZ();
-            return new Vector3(-XInterval, 0, maxZ / 2f);
+            return new Vector3(-XInterval, 0, GetMaxZ() / 2f);
         }
         
         /// <summary>
@@ -78,9 +97,7 @@ namespace BufoGames.Data
         /// </summary>
         public Vector3 GetRightTargetPosition()
         {
-            float maxX = GetMaxX();
-            float maxZ = GetMaxZ();
-            return new Vector3(maxX + XInterval, 0, maxZ / 2f);
+            return new Vector3(GetMaxX() + XInterval, 0, GetMaxZ() / 2f);
         }
     }
 }

@@ -8,6 +8,12 @@ using BufoGames.Pieces;
 public class InputManager : MonoBehaviour
 {
     private Camera _mainCamera;
+    private bool _inputEnabled = true;
+
+    public void SetInputEnabled(bool enabled)
+    {
+        _inputEnabled = enabled;
+    }
 
     private void Awake()
     {
@@ -21,6 +27,8 @@ public class InputManager : MonoBehaviour
 
     private void HandleMouseInput()
     {
+        if (!_inputEnabled) return;
+        
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);

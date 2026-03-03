@@ -11,8 +11,10 @@ namespace BufoGames.Data
         public int levelIndex = 1;
         
         [Header("Grid Configuration")]
-        [Range(2, 10)]
-        public int gridSize = 4;
+        [Range(2, 12)]
+        public int gridWidth = 4;   // X ekseni (sütun sayısı)
+        [Range(2, 12)]
+        public int gridHeight = 4;  // Z ekseni (satır sayısı)
         
         [Header("Puzzle Pieces")]
         public List<PieceData> pieces = new List<PieceData>();
@@ -21,6 +23,10 @@ namespace BufoGames.Data
         [HideInInspector] public bool isValidated = false;
         [HideInInspector] public string validationMessage = "";
         [HideInInspector] public int estimatedDifficulty = 1;
+        [HideInInspector] public int minimumMoves = -1;
+        
+        // Helper properties
+        public int GridArea => gridWidth * gridHeight;
         
         // Helper methods
         public PieceData GetPieceAt(int x, int z)
@@ -44,14 +50,24 @@ namespace BufoGames.Data
             return GetPieceAt(x, z) != null;
         }
         
+        public bool IsValidPosition(int x, int z)
+        {
+            return x >= 0 && x < gridWidth && z >= 0 && z < gridHeight;
+        }
+        
         public PieceData GetSource()
         {
             return pieces.FirstOrDefault(p => p.pieceType == PieceType.Source);
         }
         
-        public PieceData GetDestination()
+        public List<PieceData> GetDestinations()
         {
-            return pieces.FirstOrDefault(p => p.pieceType == PieceType.Destination);
+            return pieces.Where(p => p.pieceType == PieceType.Destination).ToList();
+        }
+        
+        public int GetDestinationCount()
+        {
+            return pieces.Count(p => p.pieceType == PieceType.Destination);
         }
         
         public void RotatePieceAt(int x, int z)
@@ -74,6 +90,14 @@ namespace BufoGames.Data
             isValidated = false;
             validationMessage = "";
         }
+        
+        /// <summary>
+        /// Remove pieces that are outside the current grid bounds
+        /// </summary>
+        public void CleanupOutOfBoundsPieces()
+        {
+            pieces.RemoveAll(p => p.x >= gridWidth || p.z >= gridHeight);
+        }
     }
     
     [System.Serializable]
@@ -83,15 +107,16 @@ namespace BufoGames.Data
         public int z;
         public PieceType pieceType;
         public int rotation; // 0, 90, 180, 270
+        public bool isDecoy; // True if this piece is a decoy (not part of the solution path)
         
-        public PieceData(int x, int z, PieceType type, int rot = 0)
+        public PieceData(int x, int z, PieceType type, int rot = 0, bool isDecoy = false)
         {
             this.x = x;
             this.z = z;
             this.pieceType = type;
             this.rotation = rot;
+            this.isDecoy = isDecoy;
         }
     }
-    
 }
 
