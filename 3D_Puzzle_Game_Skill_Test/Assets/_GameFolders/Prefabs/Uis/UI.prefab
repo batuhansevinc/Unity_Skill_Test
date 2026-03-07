@@ -375,6 +375,10 @@ PrefabInstance:
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
+    - target: {fileID: 7041090303814169402, guid: d54e04e883d24a9489a6dd94581ed7da, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7169232118291968106, guid: d54e04e883d24a9489a6dd94581ed7da, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -462,6 +466,10 @@ PrefabInstance:
     - target: {fileID: 7874307633480612861, guid: d54e04e883d24a9489a6dd94581ed7da, type: 3}
       propertyPath: _length
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910577813425996454, guid: d54e04e883d24a9489a6dd94581ed7da, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 8554053597517689087, guid: d54e04e883d24a9489a6dd94581ed7da, type: 3}
       propertyPath: m_fontAsset

@@ -24,6 +24,7 @@ namespace BufoGames.Uis
             _canvasGroup.alpha = (_canvasGroup.alpha == 0) ? 1f : 0f;
             _canvasGroup.interactable = !_canvasGroup.interactable;
             _canvasGroup.blocksRaycasts = !_canvasGroup.blocksRaycasts;
+            IsOpen = !IsOpen;
         }
     }
 }
