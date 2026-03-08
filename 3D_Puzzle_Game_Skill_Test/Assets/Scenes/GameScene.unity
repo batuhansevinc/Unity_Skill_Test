@@ -150,14 +150,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1.19
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -496,14 +496,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8453582213506753861, guid: ffba0016d219bc04ebb83ef2a127935a, type: 3}
-      propertyPath: m_BlockingMask.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 8732434543752828121, guid: ffba0016d219bc04ebb83ef2a127935a, type: 3}
-      propertyPath: m_BlockingMask.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -649,6 +641,10 @@ PrefabInstance:
     - target: {fileID: 3864529136381141011, guid: 5c47cf1b887cf884ea90560ae5292c1f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7428923460617337444, guid: 5c47cf1b887cf884ea90560ae5292c1f, type: 3}
+      propertyPath: orthographic size
+      value: 3.314951
       objectReference: {fileID: 0}
     - target: {fileID: 7611070659937740800, guid: 5c47cf1b887cf884ea90560ae5292c1f, type: 3}
       propertyPath: m_Name
