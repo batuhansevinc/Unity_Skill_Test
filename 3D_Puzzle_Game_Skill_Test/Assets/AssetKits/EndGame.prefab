@@ -3175,7 +3175,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _button: {fileID: 3106977235621957583}
-  _buttonEvent: {fileID: 11400000, guid: cebcbbd925aff8f488cd8b95f1bf6124, type: 2}
 --- !u!111 &6305999097602918109
 Animation:
   m_ObjectHideFlags: 0
@@ -4835,7 +4834,6 @@ GameObject:
   - component: {fileID: 7175887739156520018}
   - component: {fileID: 2649220040897788963}
   - component: {fileID: 4611654532245888972}
-  - component: {fileID: 7816526250016178918}
   m_Layer: 0
   m_Name: EndGame
   m_TagString: Untagged
@@ -4937,39 +4935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201a08417298c4447b03936e5d707cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeOpenButtonEvent: {fileID: 0}
   _canvasGroup: {fileID: 2649220040897788963}
---- !u!114 &7816526250016178918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5198248696346805073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627b6022cece1cc46a02c8ae4c4f9d90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameEvent: {fileID: 11400000, guid: 7cb3c5479c8d13b4aa81fc7831975e35, type: 2}
-  _untiyEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4611654532245888972}
-        m_TargetAssemblyTypeName: TwistedPipes.Uis.CanvasGroupController, Assembly-CSharp
-        m_MethodName: UpdateCanvasGroup
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _untiyEventObject:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7038861342894555758
 GameObject:
   m_ObjectHideFlags: 0

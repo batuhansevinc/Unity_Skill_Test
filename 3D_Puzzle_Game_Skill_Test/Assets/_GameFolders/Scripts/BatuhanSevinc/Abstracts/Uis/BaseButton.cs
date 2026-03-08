@@ -3,38 +3,44 @@ using UnityEngine.UI;
 
 namespace BatuhanSevinc.Uis
 {
-    public abstract class BaseButton : MonoBehaviour
+    public class BaseButton : MonoBehaviour
     {
         [SerializeField] protected Button _button;
+        System.Action _clickedCallback;
+        bool _isInitialized;
 
-        protected virtual void Awake()
+        protected virtual void HandleOnButtonClicked()
         {
-            GetReference();
+            _clickedCallback?.Invoke();
         }
 
-        protected virtual void OnValidate()
+        public virtual void Initialize(System.Action callback)
         {
-            GetReference();
-        }
+            if (_isInitialized)
+            {
+                Deinitialize();
+            }
 
-        protected virtual void OnEnable()
-        {
-            _button.onClick.AddListener(HandleOnButtonClicked);
-        }
-
-        protected virtual void OnDisable()
-        {
-            _button.onClick.RemoveListener(HandleOnButtonClicked);
-        }
-
-        protected abstract void HandleOnButtonClicked();
-
-        private void GetReference()
-        {
             if (_button == null)
             {
-                _button = GetComponentInChildren<Button>();
+                Debug.LogError($"{nameof(BaseButton)} on '{name}' requires a Button reference.");
+                return;
             }
+
+            _clickedCallback = callback;
+            _button.onClick.AddListener(HandleOnButtonClicked);
+            _isInitialized = true;
+        }
+
+        public virtual void Deinitialize()
+        {
+            if (_button != null)
+            {
+                _button.onClick.RemoveListener(HandleOnButtonClicked);
+            }
+
+            _clickedCallback = null;
+            _isInitialized = false;
         }
     }    
 }

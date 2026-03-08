@@ -251,7 +251,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _button: {fileID: 4866289633604709522}
-  _buttonEvent: {fileID: 11400000, guid: 44667ebf4a4ed0e4e8330a46a0a3d195, type: 2}
 --- !u!1 &1728905938950111772
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +302,6 @@ GameObject:
   - component: {fileID: 4956661061423684691}
   - component: {fileID: 605832140076841799}
   - component: {fileID: 4519046079096302557}
-  - component: {fileID: 3366974697793024926}
   m_Layer: 5
   m_Name: SettingsCanvas
   m_TagString: Untagged
@@ -408,39 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201a08417298c4447b03936e5d707cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeOpenButtonEvent: {fileID: 0}
   _canvasGroup: {fileID: 1175072625765254934}
---- !u!114 &3366974697793024926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1801276881214502442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627b6022cece1cc46a02c8ae4c4f9d90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameEvent: {fileID: 11400000, guid: 44667ebf4a4ed0e4e8330a46a0a3d195, type: 2}
-  _untiyEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4519046079096302557}
-        m_TargetAssemblyTypeName: TwistedPipes.Uis.CanvasGroupController, Assembly-CSharp
-        m_MethodName: UpdateCanvasGroup
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _untiyEventObject:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1963636836024367998
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,7 +593,6 @@ GameObject:
   - component: {fileID: 3106197150496610575}
   - component: {fileID: 6868721317116101995}
   - component: {fileID: 8117225723103799522}
-  - component: {fileID: 1668995259734627500}
   m_Layer: 5
   m_Name: BackgroundImage
   m_TagString: Untagged
@@ -716,39 +681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201a08417298c4447b03936e5d707cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeOpenButtonEvent: {fileID: 0}
   _canvasGroup: {fileID: 6868721317116101995}
---- !u!114 &1668995259734627500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3236215959187437612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627b6022cece1cc46a02c8ae4c4f9d90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameEvent: {fileID: 11400000, guid: 44667ebf4a4ed0e4e8330a46a0a3d195, type: 2}
-  _untiyEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8117225723103799522}
-        m_TargetAssemblyTypeName: TwistedPipes.Uis.CanvasGroupController, Assembly-CSharp
-        m_MethodName: UpdateCanvasGroup
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _untiyEventObject:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3438766205444207753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1284,7 +1217,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _button: {fileID: 301858392877328899}
-  _buttonEvent: {fileID: 11400000, guid: 44667ebf4a4ed0e4e8330a46a0a3d195, type: 2}
 --- !u!1 &3914976907895610822
 GameObject:
   m_ObjectHideFlags: 0
@@ -2630,7 +2562,6 @@ GameObject:
   - component: {fileID: 2296093890356181117}
   - component: {fileID: 2707781801530009912}
   - component: {fileID: 1484685159317699554}
-  - component: {fileID: 5491866660064547402}
   m_Layer: 5
   m_Name: ButtonSwitch
   m_TagString: Untagged
@@ -2762,25 +2693,6 @@ MonoBehaviour:
   _onImage: {fileID: 3914976907895610822}
   _offImage: {fileID: 7500009910581995541}
   _isOpen: 1
---- !u!114 &5491866660064547402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737767147729937837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1365a5aeb9ab4c44ca5fccefa3c6b9df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _buttonPlaySound: {fileID: 0}
-  _toggle: {fileID: 2707781801530009912}
-  _onImage: {fileID: 3914976907895610822}
-  _offImage: {fileID: 7500009910581995541}
-  _isOpen: 1
-  _parameterValue: SoundVolume
-  _audioMixerGroup: {fileID: 2963701444020922846, guid: ceb9b4350aee839458239b624811d78f, type: 2}
 --- !u!1 &7945504430810933421
 GameObject:
   m_ObjectHideFlags: 0

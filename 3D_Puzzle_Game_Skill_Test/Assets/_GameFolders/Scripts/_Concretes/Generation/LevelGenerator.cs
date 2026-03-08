@@ -10,6 +10,18 @@ using BufoGames.Tiles;
 
 namespace BufoGames.Generation
 {
+    public readonly struct LevelGenerationResult
+    {
+        public readonly GameObject LevelRoot;
+        public readonly LevelController LevelController;
+
+        public LevelGenerationResult(GameObject levelRoot, LevelController levelController)
+        {
+            LevelRoot = levelRoot;
+            LevelController = levelController;
+        }
+    }
+
     public class LevelGenerator : MonoBehaviour
     {
         [SerializeField] private ThemeDataSO defaultTheme;
@@ -32,9 +44,9 @@ namespace BufoGames.Generation
             defaultTheme = theme;
         }
 
-        public GameObject GenerateLevel(LevelDataSO levelData)
+        public LevelGenerationResult GenerateLevel(LevelDataSO levelData)
         {
-            if (levelData == null) return null;
+            if (levelData == null) return new LevelGenerationResult(null, null);
 
             _spawnedPieces.Clear();
             _tileMap.Clear();
@@ -47,7 +59,7 @@ namespace BufoGames.Generation
             GameObject levelRoot = new GameObject($"Level_{levelData.levelIndex}");
 
             ThemeDataSO theme = defaultTheme;
-            if (theme == null) return levelRoot;
+            if (theme == null) return new LevelGenerationResult(levelRoot, null);
 
             GameObject gridParent = new GameObject("Grid");
             gridParent.transform.SetParent(levelRoot.transform);
@@ -60,7 +72,7 @@ namespace BufoGames.Generation
             LevelController controller = levelRoot.AddComponent<LevelController>();
             controller.Initialize(levelData.gridWidth, levelData.gridHeight, _spawnedPieces, _sourceController, _destinationControllers);
 
-            return levelRoot;
+            return new LevelGenerationResult(levelRoot, controller);
         }
 
         private void GenerateTiles(GameObject parent, LevelDataSO levelData, ThemeDataSO theme)

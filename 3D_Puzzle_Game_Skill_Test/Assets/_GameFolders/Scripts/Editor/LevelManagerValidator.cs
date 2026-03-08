@@ -14,8 +14,6 @@ namespace BufoGames.Editor
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Setup Validation", EditorStyles.boldLabel);
             
-            LevelManager levelManager = (LevelManager)target;
-            
             SerializedProperty levelDatabaseProp = serializedObject.FindProperty("levelDatabase");
             SerializedProperty defaultThemeProp = serializedObject.FindProperty("defaultTheme");
             
@@ -36,9 +34,7 @@ namespace BufoGames.Editor
             {
                 EditorGUILayout.HelpBox("❌ Default Theme eksik!", MessageType.Error);
             }
-            
-            EditorGUILayout.Space(5);
-            
+
             SerializedProperty upTargetProp = serializedObject.FindProperty("upTarget");
             SerializedProperty downTargetProp = serializedObject.FindProperty("downTarget");
             SerializedProperty leftTargetProp = serializedObject.FindProperty("leftTarget");
@@ -73,34 +69,9 @@ namespace BufoGames.Editor
             }
             
             EditorGUILayout.Space(5);
-            
-            SerializedProperty levelCompletedEventProp = serializedObject.FindProperty("levelCompletedEvent");
-            SerializedProperty fireworksEventProp = serializedObject.FindProperty("fireworksEvent");
-            SerializedProperty startEndGameAnimationsEventProp = serializedObject.FindProperty("startEndGameAnimationsEvent");
-            
-            bool allEventsAssigned = true;
-            
-            if (levelCompletedEventProp == null || levelCompletedEventProp.objectReferenceValue == null)
-            {
-                allEventsAssigned = false;
-            }
-            if (fireworksEventProp == null || fireworksEventProp.objectReferenceValue == null)
-            {
-                allEventsAssigned = false;
-            }
-            if (startEndGameAnimationsEventProp == null || startEndGameAnimationsEventProp.objectReferenceValue == null)
-            {
-                allEventsAssigned = false;
-            }
-            
-            if (allEventsAssigned)
-            {
-                EditorGUILayout.HelpBox("✅ Tüm Game Event'ler atanmış", MessageType.Info);
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("⚠️ Bazı Game Event'ler eksik", MessageType.Warning);
-            }
+            EditorGUILayout.HelpBox(
+                "Gameplay completion flow is orchestrated by GameSceneManager. LevelManager is gameplay-only and UI-independent.",
+                MessageType.Info);
             
             EditorGUILayout.Space(10);
             

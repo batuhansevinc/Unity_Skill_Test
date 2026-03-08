@@ -1,5 +1,7 @@
 # Scripts Architecture Map
 
+> Note: UI flow sections in this map describe the legacy event-driven setup. Current UI runtime architecture is documented in `UI_ARCHITECTURE.md`.
+
 ## Scope
 
 This document maps all C# scripts under:
@@ -366,4 +368,3 @@ If you are new to this project, read in this order:
 4. `PieceBase` + piece controllers -> interaction model
 5. `PipeConnectionHelper` -> connection rules source of truth
 6. `VisualLevelEditor` + `LevelValidator` -> content creation and solvability checks
-

@@ -1,14 +1,19 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace BufoGames.Uis
 {
-    public class ReTryButton : BaseButtonWithGameEvents
+    public class ReTryButton : BatuhanSevinc.Uis.BaseButton
     {
         [SerializeField] AudioSource _buttonClickSound;
+
         protected override void HandleOnButtonClicked()
         {
-            _buttonClickSound.Play();
-            _buttonEvent.InvokeEvents();
+            if (_buttonClickSound != null)
+            {
+                _buttonClickSound.Play();
+            }
+
+            base.HandleOnButtonClicked();
         }
     }
 }

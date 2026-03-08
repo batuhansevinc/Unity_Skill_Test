@@ -13,145 +13,25 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: Assembly-CSharp::Assignment01.Data.LevelDataSO
   levelIndex: 1
-  gridWidth: 6
-  gridHeight: 6
+  gridWidth: 3
+  gridHeight: 3
   pieces:
-  - x: 1
-    z: 2
-    pieceType: 2
-    rotation: 180
-    isDecoy: 0
-  - x: 1
-    z: 1
-    pieceType: 3
-    rotation: 90
-    isDecoy: 0
-  - x: 1
-    z: 0
-    pieceType: 4
-    rotation: 0
-    isDecoy: 0
-  - x: 0
-    z: 0
-    pieceType: 8
-    rotation: 0
-    isDecoy: 0
   - x: 0
     z: 1
-    pieceType: 3
-    rotation: 90
-    isDecoy: 0
-  - x: 0
-    z: 2
-    pieceType: 7
-    rotation: 0
-    isDecoy: 0
-  - x: 0
-    z: 3
-    pieceType: 4
-    rotation: 0
-    isDecoy: 0
-  - x: 1
-    z: 3
-    pieceType: 4
-    rotation: 180
-    isDecoy: 0
-  - x: 1
-    z: 4
-    pieceType: 4
-    rotation: 90
-    isDecoy: 0
-  - x: 0
-    z: 4
-    pieceType: 4
-    rotation: 90
-    isDecoy: 0
-  - x: 0
-    z: 5
-    pieceType: 8
-    rotation: 90
-    isDecoy: 0
-  - x: 1
-    z: 5
-    pieceType: 3
-    rotation: 180
-    isDecoy: 0
-  - x: 2
-    z: 5
-    pieceType: 3
-    rotation: 180
-    isDecoy: 0
-  - x: 3
-    z: 5
-    pieceType: 7
-    rotation: 90
-    isDecoy: 0
-  - x: 4
-    z: 5
-    pieceType: 7
-    rotation: 90
-    isDecoy: 0
-  - x: 5
-    z: 5
-    pieceType: 4
-    rotation: 270
-    isDecoy: 0
-  - x: 5
-    z: 4
-    pieceType: 3
-    rotation: 90
-    isDecoy: 0
-  - x: 5
-    z: 3
-    pieceType: 4
-    rotation: 180
-    isDecoy: 0
-  - x: 4
-    z: 3
-    pieceType: 4
-    rotation: 180
-    isDecoy: 0
-  - x: 4
-    z: 2
-    pieceType: 4
-    rotation: 90
-    isDecoy: 0
-  - x: 5
-    z: 2
-    pieceType: 4
-    rotation: 270
-    isDecoy: 0
-  - x: 5
-    z: 1
-    pieceType: 3
-    rotation: 90
-    isDecoy: 0
-  - x: 5
-    z: 0
-    pieceType: 4
-    rotation: 0
-    isDecoy: 0
-  - x: 4
-    z: 0
-    pieceType: 3
-    rotation: 180
-    isDecoy: 0
-  - x: 3
-    z: 0
     pieceType: 1
-    rotation: 90
+    rotation: 0
     isDecoy: 0
-  - x: 4
-    z: 1
-    pieceType: 4
-    rotation: 90
-    isDecoy: 1
   - x: 2
-    z: 4
-    pieceType: 4
-    rotation: 270
-    isDecoy: 1
-  isValidated: 1
-  validationMessage: Level is not solvable!
+    z: 1
+    pieceType: 2
+    rotation: 0
+    isDecoy: 0
+  - x: 1
+    z: 1
+    pieceType: 3
+    rotation: 0
+    isDecoy: 0
+  isValidated: 0
+  validationMessage: Source at (0,1) has port facing empty cell (Up)!
   estimatedDifficulty: 0
   minimumMoves: -1

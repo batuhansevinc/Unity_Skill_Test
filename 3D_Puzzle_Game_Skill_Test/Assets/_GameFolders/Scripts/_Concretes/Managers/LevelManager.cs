@@ -1,5 +1,3 @@
-using BatuhanSevinc.Abstracts.Patterns;
-using BatuhanSevinc.ScriptableObjects;
 using BufoGames.Controller;
 using BufoGames.Data;
 using BufoGames.Generation;
@@ -7,55 +5,71 @@ using UnityEngine;
 
 namespace BufoGames.Managers
 {
-    public class LevelManager : SingletonMonoDestroy<LevelManager>
+    public class LevelManager : MonoBehaviour
     {
         [SerializeField] private bool isTesting = true;
         [SerializeField] private string id = "CurrentLevel";
         [SerializeField] private int currentLevel = 1;
         [SerializeField] private LevelDatabaseSO levelDatabase;
         [SerializeField] private ThemeDataSO defaultTheme;
-        [SerializeField] private GameEvent levelCompletedEvent;
-        [SerializeField] private GameEvent fireworksEvent;
-        [SerializeField] private GameEvent startEndGameAnimationsEvent;
         
         public Transform upTarget;
         public Transform downTarget;
         public Transform leftTarget;
         public Transform rightTarget;
 
+        private InputManager inputManager;
         private LevelGenerator levelGenerator;
         private GameObject currentLevelInstance;
         private LevelController currentLevelController;
         private int currentLevelIndex;
+        private bool isInitialized;
         
         public int CurrentLevel => currentLevelIndex + 1;
         public int TotalLevels => levelDatabase != null ? levelDatabase.GetTotalLevelCount() : 0;
         public LevelController CurrentLevelController => currentLevelController;
+        
+        public event System.Action<LevelController, int> LevelLoaded;
 
-        private void Awake()
+        public void Initialize(InputManager sceneInputManager)
         {
-            SetSingleton(this);
-            EnsureInputManager();
-            InitializeGenerator();
-        }
-        
-        private void Start()
-        {
-            InitializeGame();
-        }
-        
-        private void EnsureInputManager()
-        {
-            var inputManager = FindObjectOfType<InputManager>();
-            if (inputManager == null)
+            if (isInitialized)
             {
-                GameObject inputObj = new GameObject("InputManager");
-                inputObj.AddComponent<InputManager>();
+                Deinitialize();
             }
+
+            inputManager = sceneInputManager;
+            InitializeGenerator();
+            InitializeCurrentLevelIndex();
+            isInitialized = true;
+        }
+
+        public void Deinitialize()
+        {
+            if (currentLevelInstance != null)
+            {
+                Destroy(currentLevelInstance);
+                currentLevelInstance = null;
+                currentLevelController = null;
+            }
+
+            if (levelGenerator != null)
+            {
+                Destroy(levelGenerator.gameObject);
+                levelGenerator = null;
+            }
+
+            inputManager = null;
+            isInitialized = false;
         }
 
         private void InitializeGenerator()
         {
+            if (levelGenerator != null)
+            {
+                Destroy(levelGenerator.gameObject);
+            }
+
             GameObject generatorObj = new GameObject("LevelGenerator");
             generatorObj.transform.SetParent(transform);
             levelGenerator = generatorObj.AddComponent<LevelGenerator>();
@@ -66,10 +80,13 @@ namespace BufoGames.Managers
             }
         }
         
-        private void InitializeGame()
+        private void InitializeCurrentLevelIndex()
         {
-            if (levelDatabase == null || levelDatabase.GetTotalLevelCount() == 0) return;
-            if (levelGenerator == null) return;
+            if (levelDatabase == null || levelDatabase.GetTotalLevelCount() == 0)
+            {
+                currentLevelIndex = 0;
+                return;
+            }
             
             if (isTesting)
             {
@@ -79,8 +96,11 @@ namespace BufoGames.Managers
             {
                 currentLevelIndex = PlayerPrefs.GetInt(id, 0);
             }
-            
-            LoadLevel(currentLevelIndex);
+
+            if (currentLevelIndex < 0 || currentLevelIndex >= TotalLevels)
+            {
+                currentLevelIndex = 0;
+            }
         }
 
         public void LoadLevel(int levelIndex)
@@ -91,27 +111,30 @@ namespace BufoGames.Managers
                 currentLevelInstance = null;
                 currentLevelController = null;
             }
+
+            if (levelGenerator == null || levelDatabase == null)
+            {
+                return;
+            }
             
             if (levelIndex < 0 || levelIndex >= TotalLevels) return;
             
             LevelDataSO levelData = levelDatabase.GetLevel(levelIndex);
             if (levelData == null) return;
             
-            currentLevelInstance = levelGenerator.GenerateLevel(levelData);
-            if (currentLevelInstance == null) return;
-            
-            currentLevelController = currentLevelInstance.GetComponent<LevelController>();
+            LevelGenerationResult levelResult = levelGenerator.GenerateLevel(levelData);
+            currentLevelInstance = levelResult.LevelRoot;
+            currentLevelController = levelResult.LevelController;
             
             if (currentLevelController != null)
             {
-                currentLevelController.SetGameEvents(levelCompletedEvent, fireworksEvent, startEndGameAnimationsEvent);
                 AdjustCameraTargets(currentLevelController);
             }
             
             currentLevelIndex = levelIndex;
+            LevelLoaded?.Invoke(currentLevelController, CurrentLevel);
             
             // Disable input during spawn animation
-            var inputManager = FindObjectOfType<InputManager>();
             if (inputManager != null)
                 inputManager.SetInputEnabled(false);
             

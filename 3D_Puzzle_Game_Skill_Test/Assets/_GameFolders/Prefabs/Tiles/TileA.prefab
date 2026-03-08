@@ -60,6 +60,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2424852793607944906, guid: e9e3e5e503e5054458fba56de1c828f2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5329c279cf98d2c4982c988548099e55, type: 2}
+    - target: {fileID: 2424852793607944906, guid: e9e3e5e503e5054458fba56de1c828f2, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 38058be8a252f7b41ab0aae5515f8628, type: 2}
     - target: {fileID: 3572340061655634463, guid: e9e3e5e503e5054458fba56de1c828f2, type: 3}
       propertyPath: _rotationDuration
       value: 0.5

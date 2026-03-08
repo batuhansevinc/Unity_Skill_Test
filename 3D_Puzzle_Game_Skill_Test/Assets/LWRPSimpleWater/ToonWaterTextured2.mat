@@ -87,20 +87,20 @@ Material:
     - Boolean_7D146A9B: 1
     - Boolean_8195AB04: 0
     - Boolean_81A86F44: 0
-    - Vector1_150C867D: 0.26
-    - Vector1_2589A33D: 0.5
+    - Vector1_150C867D: 0.57
+    - Vector1_2589A33D: 1
     - Vector1_2D4B3B5D: 1.02
-    - Vector1_47ABB6CE: 0.7
-    - Vector1_4C81FDE9: 0.95
-    - Vector1_5CFC229D: 0.04
-    - Vector1_756CD72E: 1.11
-    - Vector1_89E72A66: 2.48
-    - Vector1_8F08E6AF: 0.7
-    - Vector1_B3E4AEB4: 0.1
-    - Vector1_B87F0175: 6.59
-    - Vector1_C6207B7E: 0.4
+    - Vector1_47ABB6CE: 0.39
+    - Vector1_4C81FDE9: 0
+    - Vector1_5CFC229D: 1
+    - Vector1_756CD72E: 0.65
+    - Vector1_89E72A66: 1
+    - Vector1_8F08E6AF: 2.96
+    - Vector1_B3E4AEB4: 0.2
+    - Vector1_B87F0175: 1
+    - Vector1_C6207B7E: 0.01
     - Vector1_E71D33EA: 0
-    - Vector1_EDFED8F0: 0.89
+    - Vector1_EDFED8F0: 1
     - Vector1_FC797EC1: 0.04
     - _AlphaClip: 0
     - _Blend: 0
@@ -123,11 +123,12 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _WorkflowMode: 1
+    - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
     - Color_60C3C880: {r: 2.493826, g: 0.85032797, b: 0, a: 0}
-    - Color_701A469: {r: 1, g: 0.8662936, b: 0, a: 0}
-    - Color_70CB5AC5: {r: 0.4528302, g: 0.42561284, b: 0, a: 0}
+    - Color_701A469: {r: 0.25943398, g: 0.5412401, b: 1, a: 0}
+    - Color_70CB5AC5: {r: 0.03529414, g: 0.4470027, b: 0.8980392, a: 0}
     - Vector2_71C24621: {r: 0.05, g: 0.1, b: 0, a: 0}
     - Vector2_E4C72AD2: {r: 0.05, g: 0.03, b: 0, a: 0}
     - Vector2_FE0C2D14: {r: 0.05, g: 0.05, b: 0, a: 0}

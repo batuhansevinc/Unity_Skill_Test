@@ -766,7 +766,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _button: {fileID: 7454090597888684005}
-  _buttonEvent: {fileID: 11400000, guid: 6d190e19e18124b3b9a9299d7d1a70fc, type: 2}
   _buttonClickSound: {fileID: 7746479389514511417}
 --- !u!95 &5610886450817320422
 Animator:

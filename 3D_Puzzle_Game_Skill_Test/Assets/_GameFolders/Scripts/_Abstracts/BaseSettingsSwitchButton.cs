@@ -1,5 +1,4 @@
 using BatuhanSevinc.Enums;
-using BatuhanSevinc.Helpers;
 using BatuhanSevinc.Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,31 +8,44 @@ namespace BufoGames.Abstracts.Uis
     public abstract class BaseSettingsSwitchButton : MonoBehaviour
     {
         [SerializeField] AudioSource _buttonPlaySound;
-        [SerializeField] Toggle _toggle; // Changed this to Toggle
+        [SerializeField] protected Toggle _toggle;
         [SerializeField] protected GameObject _onImage;
         [SerializeField] protected GameObject _offImage;
         [SerializeField] protected bool _isOpen = true;
+        bool _isInitialized;
 
-        protected virtual void OnValidate()
+        public virtual void Initialize()
         {
-            this.GetReference(ref _toggle); // Updated this line for Toggle
+            if (_isInitialized)
+            {
+                Deinitialize();
+            }
+
+            if (_toggle == null || _onImage == null || _offImage == null)
+            {
+                Debug.LogError($"{nameof(BaseSettingsSwitchButton)} on '{name}' has missing serialized references.");
+                return;
+            }
+
+            _toggle.onValueChanged.AddListener(HandleOnToggleValueChanged);
+            _isInitialized = true;
         }
 
-        protected virtual void OnEnable()
+        public virtual void Deinitialize()
         {
-            _toggle.onValueChanged.AddListener(HandleOnToggleValueChanged); // Updated for Toggle
+            if (_toggle != null)
+            {
+                _toggle.onValueChanged.RemoveListener(HandleOnToggleValueChanged);
+            }
+
+            _isInitialized = false;
         }
 
-        protected virtual void OnDisable()
-        {
-            _toggle.onValueChanged.RemoveListener(HandleOnToggleValueChanged); // Updated for Toggle
-        }
-
-        protected virtual void HandleOnToggleValueChanged(bool isOn) // Updated to accept bool parameter
+        protected virtual void HandleOnToggleValueChanged(bool isOn)
         {
             if (_buttonPlaySound != null)
                 _buttonPlaySound.Play();
-            _isOpen = isOn; // Updated to use the Toggle's isOn property
+            _isOpen = isOn;
         }
 
         protected void SaveData(string key, bool value)
@@ -54,6 +66,8 @@ namespace BufoGames.Abstracts.Uis
         protected void SetValue(bool value, string key, System.Action unmuteSoundCallback = null,
             System.Action muteSoundCallback = null)
         {
+            _isOpen = value;
+
             if (value)
             {
                 _offImage.SetActive(false);
@@ -66,6 +80,12 @@ namespace BufoGames.Abstracts.Uis
                 _onImage.SetActive(false);
                 muteSoundCallback?.Invoke();
             }
+
+            if (_toggle != null && _toggle.isOn != value)
+            {
+                _toggle.SetIsOnWithoutNotify(value);
+            }
+
             SaveData(key, _isOpen);
         }
     }

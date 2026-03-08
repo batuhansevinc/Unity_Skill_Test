@@ -1,10 +1,6 @@
 namespace BufoGames.Uis
 {
-    public class CloseSettingsButton : BaseButtonWithGameEvents
+    public class CloseSettingsButton : BatuhanSevinc.Uis.BaseButton
     {
-        protected override void HandleOnButtonClicked()
-        {
-            _buttonEvent.InvokeEvents();
-        }
     }
 }

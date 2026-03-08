@@ -1,10 +1,6 @@
 namespace BufoGames.Uis
 {
-    public class SettingsButton : BaseButtonWithGameEvents
+    public class SettingsButton : BatuhanSevinc.Uis.BaseButton
     {
-        protected override void HandleOnButtonClicked()
-        {
-            _buttonEvent.InvokeEvents();
-        }
     }
 }

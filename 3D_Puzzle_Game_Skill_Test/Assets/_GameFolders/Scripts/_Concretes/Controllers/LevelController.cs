@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BatuhanSevinc.ScriptableObjects;
 using BufoGames.Abstract.Controllers;
 using BufoGames.Constants;
 using BufoGames.Data;
@@ -15,9 +14,6 @@ namespace BufoGames.Controller
     {
         [SerializeField, Range(1, 12)] public int gridWidth = 4;
         [SerializeField, Range(1, 12)] public int gridHeight = 4;
-        [SerializeField] private GameEvent levelCompletedEvent;
-        [SerializeField] private GameEvent fireworksEvent;
-        [SerializeField] private GameEvent startEndGameAnimationsEvent;
         
         private GridManager _gridManager;
         private ConnectionValidator _connectionValidator;
@@ -34,6 +30,10 @@ namespace BufoGames.Controller
         public int GridHeight => gridHeight;
         public int DestinationCount => _destinations?.Count ?? 0;
         public int ConnectedDestinationCount => _connectionValidator?.LastConnectedDestinations ?? 0;
+
+        public event System.Action LevelCompletionAnimationStarted;
+        public event System.Action FireworksTriggered;
+        public event System.Action LevelCompleted;
         
         public void Initialize(int width, int height, List<PieceBase> pieces, SourceController source, List<DestinationController> destinations)
         {
@@ -58,13 +58,6 @@ namespace BufoGames.Controller
         public void OnSpawnAnimationComplete()
         {
             StartCoroutine(InitialConnectionCheck());
-        }
-        
-        public void SetGameEvents(GameEvent levelCompleted, GameEvent fireworks, GameEvent startEndAnimations)
-        {
-            levelCompletedEvent = levelCompleted;
-            fireworksEvent = fireworks;
-            startEndGameAnimationsEvent = startEndAnimations;
         }
         
         private void SubscribeToPipeEvents()
@@ -178,12 +171,12 @@ namespace BufoGames.Controller
         
         private IEnumerator OnLevelCompleted()
         {
-            startEndGameAnimationsEvent?.InvokeEvents();
+            LevelCompletionAnimationStarted?.Invoke();
             
             yield return new WaitForSeconds(LevelConstants.COMPLETION_ANIMATION_DURATION);
             
-            fireworksEvent?.InvokeEvents();
-            levelCompletedEvent?.InvokeEvents();
+            FireworksTriggered?.Invoke();
+            LevelCompleted?.Invoke();
         }
         
         private void OnDestroy()

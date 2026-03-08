@@ -10,14 +10,14 @@ namespace BufoGames.Uis
 
         [SerializeField] string _parameterValue;
         [SerializeField] AudioMixerGroup _audioMixerGroup;
-        
-        void Start()
+
+        public override void Initialize()
         {
+            base.Initialize();
             LoadData(SOUND_KEY);
             SetValue(_isOpen, SOUND_KEY, UnmuteCallback, MuteCallback);
         }
 
-        // Override the base class method to extend its behavior
         protected override void HandleOnToggleValueChanged(bool isOn) 
         {
             base.HandleOnToggleValueChanged(isOn);

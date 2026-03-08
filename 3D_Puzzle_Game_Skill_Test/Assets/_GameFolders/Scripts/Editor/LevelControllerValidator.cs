@@ -12,39 +12,18 @@ namespace BufoGames.Editor
             DrawDefaultInspector();
             
             EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("Event Validation", EditorStyles.boldLabel);
-            
-            SerializedProperty levelCompletedEventProp = serializedObject.FindProperty("levelCompletedEvent");
-            SerializedProperty fireworksEventProp = serializedObject.FindProperty("fireworksEvent");
-            SerializedProperty startEndGameAnimationsEventProp = serializedObject.FindProperty("startEndGameAnimationsEvent");
-            
-            bool allEventsAssigned = true;
-            
-            if (levelCompletedEventProp == null || levelCompletedEventProp.objectReferenceValue == null)
+            EditorGUILayout.LabelField("Completion Flow", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(
+                "Level completion is emitted via typed C# events on LevelController and orchestrated by GameSceneManager/UIManager.",
+                MessageType.Info);
+
+            if (Application.isPlaying)
             {
-                EditorGUILayout.HelpBox("⚠️ Level Completed Event eksik (Runtime'da LevelManager tarafından inject edilecek)", MessageType.Warning);
-                allEventsAssigned = false;
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("✅ Level Completed Event atanmış", MessageType.Info);
-            }
-            
-            if (fireworksEventProp == null || fireworksEventProp.objectReferenceValue == null)
-            {
-                allEventsAssigned = false;
-            }
-            
-            if (startEndGameAnimationsEventProp == null || startEndGameAnimationsEventProp.objectReferenceValue == null)
-            {
-                allEventsAssigned = false;
-            }
-            
-            EditorGUILayout.Space(5);
-            
-            if (!allEventsAssigned)
-            {
-                EditorGUILayout.HelpBox("ℹ️ Event'ler runtime'da LevelManager tarafından inject edilir. Prefab'da boş olması normaldir.", MessageType.Info);
+                LevelController levelController = (LevelController)target;
+                EditorGUILayout.Space(5);
+                EditorGUILayout.LabelField("Runtime Status", EditorStyles.boldLabel);
+                EditorGUILayout.LabelField("Is Level Complete", levelController.IsLevelComplete ? "Yes" : "No");
+                EditorGUILayout.LabelField("Connection Stats", levelController.GetConnectionStats());
             }
         }
     }

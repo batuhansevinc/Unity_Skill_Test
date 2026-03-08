@@ -5,9 +5,10 @@ namespace BufoGames.Uis
     public class VibrationSettingsButton : BaseSettingsSwitchButton
     {
         const string VIBRATION_KEY = "vibration_key";
-        
-        void Start()
+
+        public override void Initialize()
         {
+            base.Initialize();
             LoadData(VIBRATION_KEY);
             SetValue(_isOpen, VIBRATION_KEY,UnmuteCallback,MuteCallback);
         }

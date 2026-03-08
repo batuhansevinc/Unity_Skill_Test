@@ -7,21 +7,45 @@ using BufoGames.Pieces;
 /// </summary>
 public class InputManager : MonoBehaviour
 {
-    private Camera _mainCamera;
+    [SerializeField] private Camera _mainCamera;
     private bool _inputEnabled = true;
+    private bool _isInitialized;
+
+    public void Initialize(Camera mainCamera)
+    {
+        if (mainCamera != null)
+        {
+            _mainCamera = mainCamera;
+        }
+
+        if (_mainCamera == null)
+        {
+            Debug.LogError($"{nameof(InputManager)} on '{name}' requires a Camera reference.");
+            return;
+        }
+
+        _inputEnabled = true;
+        _isInitialized = true;
+    }
+
+    public void Deinitialize()
+    {
+        _inputEnabled = false;
+        _isInitialized = false;
+    }
 
     public void SetInputEnabled(bool enabled)
     {
         _inputEnabled = enabled;
     }
 
-    private void Awake()
-    {
-        _mainCamera = Camera.main;
-    }
-
     private void Update()
     {
+        if (!_isInitialized)
+        {
+            return;
+        }
+
         HandleMouseInput();
     }
 
