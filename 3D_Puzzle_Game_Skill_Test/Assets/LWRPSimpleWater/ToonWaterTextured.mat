@@ -13,13 +13,14 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
+  - XRMotionVectors
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -83,24 +84,24 @@ Material:
     m_Ints: []
     m_Floats:
     - Boolean_3642CAF8: 1
-    - Boolean_51494403: 0
+    - Boolean_51494403: 1
     - Boolean_7D146A9B: 1
-    - Boolean_8195AB04: 1
+    - Boolean_8195AB04: 0
     - Boolean_81A86F44: 0
-    - Vector1_150C867D: 0.26
-    - Vector1_2589A33D: 1
+    - Vector1_150C867D: 1
+    - Vector1_2589A33D: 0
     - Vector1_2D4B3B5D: 1.02
-    - Vector1_47ABB6CE: 0.88
-    - Vector1_4C81FDE9: 0.95
-    - Vector1_5CFC229D: 9.28
-    - Vector1_756CD72E: 0.08
-    - Vector1_89E72A66: 2.3
-    - Vector1_8F08E6AF: 29.6
-    - Vector1_B3E4AEB4: 0.1
-    - Vector1_B87F0175: 0.5
-    - Vector1_C6207B7E: 0.52
-    - Vector1_E71D33EA: 0.1
-    - Vector1_EDFED8F0: 10.2
+    - Vector1_47ABB6CE: 1
+    - Vector1_4C81FDE9: 1
+    - Vector1_5CFC229D: 8.57
+    - Vector1_756CD72E: 1
+    - Vector1_89E72A66: 25.22
+    - Vector1_8F08E6AF: 1
+    - Vector1_B3E4AEB4: 1
+    - Vector1_B87F0175: 1
+    - Vector1_C6207B7E: 1
+    - Vector1_E71D33EA: 9.68
+    - Vector1_EDFED8F0: 1
     - Vector1_FC797EC1: 0.04
     - _AlphaClip: 0
     - _Blend: 0
@@ -123,14 +124,15 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _WorkflowMode: 1
+    - _XRMotionVectorsPass: 0
     - _ZWrite: 1
     m_Colors:
     - Color_60C3C880: {r: 1024, g: 1024, b: 1024, a: 1}
     - Color_701A469: {r: 0.15045391, g: 0.23474698, b: 0.6509434, a: 0}
     - Color_70CB5AC5: {r: 0.015619445, g: 0.10608879, b: 0.254717, a: 0}
-    - Vector2_71C24621: {r: -0.03, g: 0.01, b: 0, a: 0}
-    - Vector2_E4C72AD2: {r: 0.01, g: 0.001, b: 0, a: 0}
-    - Vector2_FE0C2D14: {r: 1.92, g: 0, b: 0, a: 0}
+    - Vector2_71C24621: {r: 1, g: 1, b: 0, a: 0}
+    - Vector2_E4C72AD2: {r: 1, g: 1, b: 0, a: 0}
+    - Vector2_FE0C2D14: {r: 1, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

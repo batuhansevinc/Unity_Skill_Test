@@ -39,10 +39,12 @@
   <Project Path="Unity.AI.Generators.UI.csproj" />
   <Project Path="Unity.TestTools.CodeCoverage.Editor.csproj" />
   <Project Path="Unity.Burst.CodeGen.csproj" />
+  <Project Path="MK.Toon.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Flow.csproj" />
   <Project Path="Unity.AI.Pbr.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.csproj" />
+  <Project Path="MK.Toon.URP.csproj" />
   <Project Path="glTFast.Export.csproj" />
   <Project Path="Unity.AppUI.Navigation.Editor.csproj" />
   <Project Path="Unity.Serialization.csproj" />
@@ -83,6 +85,7 @@
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
   <Project Path="Unity.AppUI.Redux.Editor.csproj" />
   <Project Path="Unity.AI.Toolkit.Compliance.csproj" />
+  <Project Path="MK.Toon.csproj" />
   <Project Path="Unity.AppUI.Undo.csproj" />
   <Project Path="Unity.AI.Generators.Contexts.csproj" />
   <Project Path="Unity.EditorCoroutines.Editor.csproj" />
@@ -102,5 +105,6 @@
   <Project Path="Unity.VisualScripting.DocCodeExamples.csproj" />
   <Project Path="Unity.InferenceEngine.iOSBLAS.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.Entities.csproj" />
+  <Project Path="MK.Toon.URP.Editor.csproj" />
   <Project Path="Unity.Collections.Editor.csproj" />
 </Solution>
